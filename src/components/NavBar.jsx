@@ -1,5 +1,4 @@
 import axios from "axios";
-import React, { use } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
