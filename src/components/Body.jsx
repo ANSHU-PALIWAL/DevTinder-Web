@@ -1,16 +1,43 @@
-import React from 'react'
-import NavBar from './NavBar'
-import { Outlet } from 'react-router-dom'
-import Footer from './Footer'
+import React, { useEffect } from "react";
+import NavBar from "./NavBar";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import Footer from "./Footer";
+import axios from "axios";
+import { API_BASE_URL } from "../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Body = () => {
-    return (
-        <div>
-            <NavBar />
-            <Outlet />
-            <Footer />
-        </div>
-    )
-}
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userData = useSelector((store) => store.user);
 
-export default Body
+  const fetchUser = async () => {
+    if (userData) return;
+    try {
+      const res = await axios.get(API_BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
+      dispatch(addUser(res.data));
+    } catch (error) {
+      if (error.status === 401) {
+        navigate("/login");
+      }
+      console.error("Error fetching user:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  return (
+    <div>
+      <NavBar />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
+
+export default Body;
