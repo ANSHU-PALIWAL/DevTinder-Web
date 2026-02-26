@@ -8,6 +8,7 @@ import { API_BASE_URL } from "../utils/constants";
 const Login = () => {
   const [emailId, setEmailId] = useState("Anshu@gmail.com");
   const [password, setPassword] = useState("Anshu@123");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,8 +24,8 @@ const Login = () => {
       );
       dispatch(addUser(res.data));
       return navigate("/");
-    } catch (error) {
-      console.error("Error logging in:", error);
+    } catch (err) {
+      setError(err?.response?.data || err?.response || "Something went wrong");
     }
   };
 
@@ -33,7 +34,7 @@ const Login = () => {
       <div className="card bg-base-300 shadow-sm text-primary-content w-96">
         <div className="card-body">
           <h2 className="card-title">Login</h2>
-          <div className="mb-4 mt-4">
+          <div className="mt-4">
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Enter your Email Id</legend>
               <input
@@ -53,7 +54,10 @@ const Login = () => {
               />
             </fieldset>
           </div>
-          <div className="card-actions justify-end">
+
+          <p className="text-red-400">{error}</p>
+
+          <div className="card-actions justify-end mt-4">
             <button className="btn" onClick={handleLogin}>
               Login
             </button>
