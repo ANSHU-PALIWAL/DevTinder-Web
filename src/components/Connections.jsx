@@ -38,10 +38,10 @@ const Connections = () => {
     <div>
       <h1>Connections</h1>
       {connections.map((connection) => {
-        const { firstName, lastName, photoUrl, age, skills, about } =
+        const { _id, firstName, lastName, photoUrl, age, skills, about } =
           connection;
         return (
-          <div key={connection._id}>
+          <div key={_id}>
             <p>
               {firstName} {lastName}
             </p>
