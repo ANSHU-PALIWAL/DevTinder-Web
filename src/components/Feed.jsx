@@ -15,7 +15,7 @@ const Feed = () => {
       const res = await axios.get(API_BASE_URL + "/feed", {
         withCredentials: true,
       });
-      dispatch(addFeed(res.data));
+      dispatch(addFeed(res?.data?.data));
     } catch (error) {
       console.error("Error fetching feed:", error);
     }
@@ -25,18 +25,14 @@ const Feed = () => {
     getFeed();
   }, []);
 
-  // return (
-  //   feed && (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <UserCard user={feed?.data?.[0]} />
-  //     </div>
-  //   )
-  // );
+  if (!feed) return;
+
+  if (feed.length <= 0) return <h1>No New users found</h1>;
 
   return (
     feed && (
       <div className="min-h-screen flex flex-wrap gap-4 items-center justify-center">
-        {feed?.data?.map((user) => (
+        {feed?.map((user) => (
           <UserCard key={user._id} user={user} />
         ))}
       </div>

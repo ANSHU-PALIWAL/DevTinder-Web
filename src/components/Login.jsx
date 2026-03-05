@@ -40,7 +40,7 @@ const Login = () => {
           { withCredentials: true },
         );
         dispatch(addUser(res.data)); // Assuming signup returns the user data
-        navigate("/");
+        navigate("/profile");
       }
     } catch (err) {
       setError(err?.response?.data || err?.response || "Something went wrong");
