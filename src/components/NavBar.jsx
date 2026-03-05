@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
-import { Code2, LogOut, Settings, User as UserIcon } from "lucide-react";
+import { Code2, LogOut, Settings, User as UserIcon, Users, UserPlus } from "lucide-react";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -68,7 +68,7 @@ const NavBar = () => {
                   className="flex justify-between items-center py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <UserIcon size={16} /> Profile
+                    <UserIcon size={16} /> Edit Profile
                   </div>
                   <span className="badge badge-primary badge-sm shadow-sm shadow-primary/30">
                     New
@@ -80,27 +80,34 @@ const NavBar = () => {
                   to="/connections"
                   className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
                 >
-                  <Settings size={16} /> Connections
+                  {/* Updated Icon and Text */}
+                  <Users size={16} /> My Matches
                 </Link>
               </li>
               <li>
                 <Link
                   to="/requests"
-                  className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
+                  className="flex justify-between items-center py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
                 >
-                  <Settings size={16} /> Connection Requests
+                   {/* Updated Icon and Text */}
+                  <div className="flex items-center gap-3">
+                    <UserPlus size={16} /> Pending Requests
+                  </div>
                 </Link>
-              </li>
-              <li>
-                <a className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors">
-                  <Settings size={16} /> Settings
-                </a>
               </li>
               <div className="h-[1px] bg-base-300 w-full my-1"></div>
               <li>
+                <Link 
+                  to="/settings"
+                  className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
+                >
+                  <Settings size={16} /> Account Settings
+                </Link>
+              </li>
+              <li>
                 <a
                   onClick={handleLogout}
-                  className="flex items-center gap-3 py-3 text-error hover:bg-error/10 rounded-xl transition-colors"
+                  className="flex items-center gap-3 py-3 text-error hover:bg-error/10 rounded-xl transition-colors cursor-pointer"
                 >
                   <LogOut size={16} /> Logout
                 </a>
