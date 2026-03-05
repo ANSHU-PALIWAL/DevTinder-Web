@@ -1,2 +1,29 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+/* Scrollbar  */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #7480ff #15191e;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #15191e;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #7480ff, #ff52d9);
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #5c66e0, #e038bb);
+}

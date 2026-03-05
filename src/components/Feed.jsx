@@ -25,10 +25,20 @@ const Feed = () => {
     getFeed();
   }, []);
 
+  // return (
+  //   feed && (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <UserCard user={feed?.data?.[0]} />
+  //     </div>
+  //   )
+  // );
+
   return (
     feed && (
-      <div className="min-h-screen flex items-center justify-center">
-        <UserCard user={feed?.data?.[0]} />
+      <div className="min-h-screen flex flex-wrap gap-4 items-center justify-center">
+        {feed?.data?.map((user) => (
+          <UserCard key={user._id} user={user} />
+        ))}
       </div>
     )
   );

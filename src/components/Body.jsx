@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import NavBar from "./NavBar";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
@@ -23,7 +23,7 @@ const Body = () => {
       if (error.status === 401) {
         navigate("/login");
       }
-      console.error("Error fetching user:", error);
+      console.error(error);
     }
   };
 
@@ -32,9 +32,11 @@ const Body = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-base-100 text-base-content font-sans">
       <NavBar />
-      <Outlet />
+      <main className="flex-grow flex flex-col pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
