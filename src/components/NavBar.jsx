@@ -60,7 +60,7 @@ const NavBar = () => {
 
             <ul
               tabIndex="-1"
-              className="menu menu-sm dropdown-content bg-base-200/95 backdrop-blur-md border border-base-300 shadow-2xl rounded-2xl z-1 mt-4 w-56 p-3 gap-1"
+            className="menu menu-sm dropdown-content bg-base-200/95 backdrop-blur-md border border-base-300 shadow-2xl rounded-2xl z-1 mt-4 w-56 p-3 gap-1"
             >
               <li>
                 <Link
@@ -77,7 +77,7 @@ const NavBar = () => {
               </li>
               <li>
                 <Link
-                  to="/requests"
+                  to="/connections"
                   className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
                 >
                   <Settings size={16} /> Connections
