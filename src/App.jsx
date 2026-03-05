@@ -8,6 +8,7 @@ import Feed from "./components/Feed";
 import Connections from "./components/Connections";
 import Requests from "./components/Requests";
 import Settings from "./components/Settings";
+import NotFound from "./components/NotFound"; // 1. Import the new component!
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
               <Route path="/connections" element={<Connections />} />
               <Route path="/requests" element={<Requests />} />
               <Route path="/settings" element={<Settings />} />
+
+              {/* 2. Catch-All Route: Must be the very last route! */}
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import NavBar from "./NavBar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Footer from "./Footer";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
@@ -10,6 +10,7 @@ import { addUser } from "../utils/userSlice";
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Gets the current URL path
   const userData = useSelector((store) => store.user);
 
   const fetchUser = async () => {
@@ -20,10 +21,12 @@ const Body = () => {
       });
       dispatch(addUser(res.data));
     } catch (error) {
-      if (error.status === 401) {
+      // RULE 1: If the API fails (401 Unauthorized), and they are NOT already on the login page, kick them to /login
+      // Note: Changed to error.response?.status to prevent undefined crashes
+      if (error.response?.status === 401 && location.pathname !== "/login") {
         navigate("/login");
       }
-      console.error(error);
+      console.error("Auth check failed:", error.message);
     }
   };
 
@@ -31,13 +34,30 @@ const Body = () => {
     fetchUser();
   }, []);
 
+  // RULE 2: The Bouncer Effect (Watches the URL and User Data)
+  useEffect(() => {
+    // If the user IS logged in, and tries to visit the login page, kick them to the Feed (/)
+    if (userData && location.pathname === "/login") {
+      navigate("/");
+    }
+  }, [userData, location.pathname, navigate]);
+
+  // Clean UI Check: Is the user currently looking at the login page?
+  const isLoginPage = location.pathname === "/login";
+
   return (
     <div className="flex flex-col min-h-screen bg-base-100 text-base-content font-sans">
-      <NavBar />
-      <main className="flex-grow flex flex-col pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+      
+      {/* Only show NavBar if we are NOT on the login page */}
+      {!isLoginPage && <NavBar />}
+      
+      <main className={`flex-grow flex flex-col ${!isLoginPage ? "pt-20 pb-8 px-4 sm:px-6 lg:px-8" : ""}`}>
         <Outlet />
       </main>
-      <Footer />
+
+      {/* Only show Footer if we are NOT on the login page */}
+      {!isLoginPage && <Footer />}
+      
     </div>
   );
 };
