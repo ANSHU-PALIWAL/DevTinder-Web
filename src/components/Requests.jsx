@@ -1,12 +1,29 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { API_BASE_URL } from "../utils/constants";
-import { addRequests } from "../utils/requestSlice";
-import { useEffect } from "react";
+import { addRequests, removeRequest } from "../utils/requestSlice";
+import { useEffect, useState } from "react";
 
 const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.requests);
+
+  const [showButtons, setShowButtons] = useState(true);
+
+  const reviewRequest = async (status, _id) => {
+    try {
+      const res = axios.post(
+        API_BASE_URL + "/request/review/" + status + "/" + _id,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      dispatch(removeRequest(_id));
+    } catch (error) {
+      console.error("Error reviewing request:", error);
+    }
+  };
 
   const fetchRequests = async () => {
     try {
@@ -50,8 +67,18 @@ const Requests = () => {
             <p>Skills: {skills.join(", ")}</p>
             <p>About: {about}</p>
             <div className="mt-20">
-                <button>Accept</button>
-                <button>Decline</button>
+              <button
+                className="btn"
+                onClick={() => reviewRequest("accepted", request._id)}
+              >
+                Accept
+              </button>
+              <button
+                className="btn"
+                onClick={() => reviewRequest("rejected", request._id)}
+              >
+                Reject
+              </button>
             </div>
           </div>
         );
