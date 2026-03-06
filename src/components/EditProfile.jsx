@@ -60,11 +60,18 @@ const EditProfile = ({ user }) => {
         { firstName, lastName, about, age, gender, photoUrl, skills },
         { withCredentials: true },
       );
-      dispatch(addUser(res?.data?.user));
+
+      // 🚀 FIX: The backend now returns { success: true, data: user }
+      // So we access the user object via res.data.data
+      dispatch(addUser(res.data.data));
+
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
-      setError(err?.response?.data || "Error updating profile");
+      // 🛡️ FIX: Safely extract the clean error message from our new backend JSON
+      const errorMessage =
+        err?.response?.data?.message || "Error updating profile";
+      setError(errorMessage);
     } finally {
       setIsSaving(false);
     }

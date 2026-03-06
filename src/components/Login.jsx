@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TerminalSquare, Mail, Lock, User as UserIcon } from "lucide-react";
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+  const [isLogin, setIsLogin] = useState(true);
 
   // Form States
   const [emailId, setEmailId] = useState("Anshu@gmail.com");
@@ -30,20 +30,26 @@ const Login = () => {
           { emailId, password },
           { withCredentials: true },
         );
-        dispatch(addUser(res.data));
+        // 🚀 FIX: Axios puts the response in 'res.data'.
+        // Our backend puts the user in 'data'. So it's res.data.data!
+        dispatch(addUser(res.data.data));
         navigate("/");
       } else {
-        // SIGNUP API CALL (Ensure you have this route in your backend!)
+        // SIGNUP API CALL
         const res = await axios.post(
           API_BASE_URL + "/signup",
           { firstName, lastName, emailId, password },
           { withCredentials: true },
         );
-        dispatch(addUser(res.data)); // Assuming signup returns the user data
+        // 🚀 FIX: Same here, extract the actual user object
+        dispatch(addUser(res.data.data));
         navigate("/profile");
       }
     } catch (err) {
-      setError(err?.response?.data || err?.response || "Something went wrong");
+      // 🛡️ ERROR FIX: Extract the specific string message from our new backend JSON
+      const errorMessage =
+        err?.response?.data?.message || "Something went wrong";
+      setError(errorMessage);
     }
   };
 

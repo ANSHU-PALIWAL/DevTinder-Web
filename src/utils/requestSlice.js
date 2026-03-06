@@ -6,6 +6,9 @@ const requestSlice = createSlice({
   reducers: {
     addRequests: (state, action) => action.payload,
     removeRequest: (state, action) => {
+      // 🛡️ FIX: Safety check for null state
+      if (!state) return state;
+
       const newArray = state.filter((r) => r._id !== action.payload);
       return newArray;
     },

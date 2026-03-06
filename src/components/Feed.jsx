@@ -20,7 +20,11 @@ const Feed = () => {
       // Your logic: taking the nested data array
       dispatch(addFeed(res?.data?.data));
     } catch (error) {
-      console.error("Error fetching feed:", error);
+      // 🛡️ FIX: Clean console error logging
+      console.error(
+        "Error fetching feed:",
+        error.response?.data?.message || error.message,
+      );
     }
   };
 
@@ -41,9 +45,9 @@ const Feed = () => {
   if (feed.length <= 0) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center text-center p-4 min-h-[75vh]">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }} 
-          animate={{ scale: 1, opacity: 1 }} 
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           className="bg-base-300/50 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-base-200 max-w-md w-full"
         >
           <div className="bg-base-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
@@ -53,7 +57,8 @@ const Feed = () => {
             Out of Devs!
           </h1>
           <p className="text-base-content/60 leading-relaxed mb-6">
-            You've reviewed all developers in your area. Update your profile or check back later to find more pair-programming matches.
+            You've reviewed all developers in your area. Update your profile or
+            check back later to find more pair-programming matches.
           </p>
         </motion.div>
       </div>
@@ -66,32 +71,40 @@ const Feed = () => {
       <div className="relative w-full max-w-sm h-[550px]">
         <AnimatePresence>
           {/* Slicing to show only 3 cards max for performance, reversing to stack correctly */}
-          {[...feed].slice(0, 3).reverse().map((user, index, array) => {
-            const isTopCard = index === array.length - 1;
-            const depth = array.length - 1 - index;
+          {[...feed]
+            .slice(0, 3)
+            .reverse()
+            .map((user, index, array) => {
+              const isTopCard = index === array.length - 1;
+              const depth = array.length - 1 - index;
 
-            return (
-              <motion.div
-                key={user._id}
-                layout
-                initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                animate={{ 
-                  opacity: 1 - depth * 0.15,
-                  y: depth * 15,
-                  scale: 1 - depth * 0.05
-                }}
-                exit={{ x: 300, opacity: 0, scale: 0.8, transition: { duration: 0.2 } }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="absolute top-0 left-0 w-full h-full"
-                style={{
-                  pointerEvents: isTopCard ? "auto" : "none",
-                  zIndex: index,
-                }}
-              >
-                <UserCard user={user} isInteractive={true} />
-              </motion.div>
-            );
-          })}
+              return (
+                <motion.div
+                  key={user._id}
+                  layout
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  animate={{
+                    opacity: 1 - depth * 0.15,
+                    y: depth * 15,
+                    scale: 1 - depth * 0.05,
+                  }}
+                  exit={{
+                    x: 300,
+                    opacity: 0,
+                    scale: 0.8,
+                    transition: { duration: 0.2 },
+                  }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="absolute top-0 left-0 w-full h-full"
+                  style={{
+                    pointerEvents: isTopCard ? "auto" : "none",
+                    zIndex: index,
+                  }}
+                >
+                  <UserCard user={user} isInteractive={true} />
+                </motion.div>
+              );
+            })}
         </AnimatePresence>
       </div>
     </div>

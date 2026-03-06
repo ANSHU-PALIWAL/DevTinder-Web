@@ -16,11 +16,15 @@ const Requests = () => {
       await axios.post(
         API_BASE_URL + "/request/review/" + status + "/" + _id,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       dispatch(removeRequest(_id));
     } catch (error) {
-      console.error("Error reviewing request:", error);
+      // 🛡️ FIX: Clean console error logging
+      console.error(
+        "Error reviewing request:",
+        error.response?.data?.message || error.message,
+      );
     }
   };
 
@@ -31,7 +35,11 @@ const Requests = () => {
       });
       dispatch(addRequests(res.data.data));
     } catch (error) {
-      console.error("Error fetching requests:", error);
+      // 🛡️ FIX: Clean console error logging
+      console.error(
+        "Error fetching requests:",
+        error.response?.data?.message || error.message,
+      );
     }
   };
 
@@ -50,9 +58,9 @@ const Requests = () => {
   if (requests.length === 0) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center text-center p-4 min-h-[75vh]">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }} 
-          animate={{ scale: 1, opacity: 1 }} 
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           className="bg-base-300/50 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-base-200 max-w-md w-full"
         >
           <div className="bg-base-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
@@ -62,7 +70,8 @@ const Requests = () => {
             Inbox Zero!
           </h1>
           <p className="text-base-content/60 leading-relaxed mb-6">
-            You have no pending connection requests right now. Go swipe on some developers!
+            You have no pending connection requests right now. Go swipe on some
+            developers!
           </p>
         </motion.div>
       </div>
@@ -73,18 +82,21 @@ const Requests = () => {
     <div className="w-full max-w-5xl mx-auto p-4 sm:p-8 min-h-[85vh]">
       <div className="mb-8 flex items-center gap-3">
         <UserPlus className="text-primary" size={32} />
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Pending Requests</h1>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Pending Requests
+        </h1>
       </div>
 
       <div className="flex flex-col gap-4">
         <AnimatePresence>
           {requests.map((request) => {
-            const { _id, firstName, lastName, photoUrl, age, skills, about } = request.fromUserId || {};
+            const { _id, firstName, lastName, photoUrl, age, skills, about } =
+              request.fromUserId || {};
             const skillsArray = Array.isArray(skills) ? skills : [];
             const displayImage = photoUrl || "https://via.placeholder.com/150";
 
             return (
-              <motion.div 
+              <motion.div
                 key={request._id}
                 layout
                 initial={{ opacity: 0, x: -50 }}
@@ -94,19 +106,27 @@ const Requests = () => {
               >
                 {/* Left Side: Info */}
                 <div className="flex items-center gap-5 w-full sm:w-auto">
-                  <img 
-                    src={displayImage} 
-                    alt={`${firstName} ${lastName}`} 
+                  <img
+                    src={displayImage}
+                    alt={`${firstName} ${lastName}`}
                     className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover ring-2 ring-base-100 shadow-lg"
                   />
                   <div>
-                    <h2 className="text-xl font-bold">{firstName} {lastName} <span className="text-sm font-normal text-base-content/60 ml-2">{age}y</span></h2>
+                    <h2 className="text-xl font-bold">
+                      {firstName} {lastName}{" "}
+                      <span className="text-sm font-normal text-base-content/60 ml-2">
+                        {age}y
+                      </span>
+                    </h2>
                     <p className="text-sm text-base-content/70 line-clamp-1 mb-2 max-w-md">
                       {about || "No bio available."}
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {skillsArray.slice(0, 3).map((skill, idx) => (
-                        <span key={idx} className="badge badge-sm badge-primary badge-outline text-[10px] py-1">
+                        <span
+                          key={idx}
+                          className="badge badge-sm badge-primary badge-outline text-[10px] py-1"
+                        >
                           {skill}
                         </span>
                       ))}
@@ -116,14 +136,14 @@ const Requests = () => {
 
                 {/* Right Side: Actions */}
                 <div className="flex gap-3 w-full sm:w-auto">
-                  <button 
+                  <button
                     className="btn btn-circle btn-outline btn-error hover:bg-error hover:text-white transition-all shadow-md flex-1 sm:flex-none"
                     onClick={() => reviewRequest("rejected", request._id)}
                     title="Reject"
                   >
                     <XCircle size={24} />
                   </button>
-                  <button 
+                  <button
                     className="btn btn-circle bg-success/10 text-success hover:bg-success hover:text-white border-none transition-all shadow-md flex-1 sm:flex-none"
                     onClick={() => reviewRequest("accepted", request._id)}
                     title="Accept"

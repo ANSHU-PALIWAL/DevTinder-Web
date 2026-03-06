@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addConnections } from "../utils/connectionSlics"; // Ensure this path is correct!
+import { addConnections } from "../utils/connectionSlice"; // Ensure this path is correct!
 import { motion } from "framer-motion";
 import { Users, MessageSquare, Terminal, Code2 } from "lucide-react";
 
@@ -17,7 +17,11 @@ const Connections = () => {
       });
       dispatch(addConnections(res.data.data));
     } catch (error) {
-      console.error("Error fetching connections:", error);
+      // 🛡️ FIX: Clean console error logging
+      console.error(
+        "Error fetching connections:",
+        error.response?.data?.message || error.message,
+      );
     }
   };
 
@@ -36,9 +40,9 @@ const Connections = () => {
   if (connections.length === 0) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center text-center p-4 min-h-[75vh]">
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }} 
-          animate={{ scale: 1, opacity: 1 }} 
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
           className="bg-base-300/50 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-base-200 max-w-md w-full"
         >
           <div className="bg-base-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
@@ -48,7 +52,8 @@ const Connections = () => {
             No Connections Yet
           </h1>
           <p className="text-base-content/60 leading-relaxed mb-6">
-            Keep swiping! Once someone commits back to your profile, they will appear here ready to chat.
+            Keep swiping! Once someone commits back to your profile, they will
+            appear here ready to chat.
           </p>
         </motion.div>
       </div>
@@ -59,17 +64,20 @@ const Connections = () => {
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-8 min-h-[85vh]">
       <div className="mb-8 flex items-center gap-3">
         <Users className="text-primary" size={32} />
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Your Network</h1>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Your Network
+        </h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {connections.map((connection, index) => {
-          const { _id, firstName, lastName, photoUrl, age, skills, about } = connection;
+          const { _id, firstName, lastName, photoUrl, age, skills, about } =
+            connection;
           const skillsArray = Array.isArray(skills) ? skills : [];
           const displayImage = photoUrl || "https://via.placeholder.com/150";
 
           return (
-            <motion.div 
+            <motion.div
               key={_id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -77,15 +85,18 @@ const Connections = () => {
               className="bg-base-300/40 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-base-200/50 hover:border-primary/30 transition-all duration-300 flex flex-col"
             >
               <div className="flex items-center gap-4 mb-4">
-                <img 
-                  src={displayImage} 
-                  alt={`${firstName} ${lastName}`} 
+                <img
+                  src={displayImage}
+                  alt={`${firstName} ${lastName}`}
                   className="w-20 h-20 rounded-full object-cover ring-2 ring-primary ring-offset-base-300 ring-offset-2 shadow-lg"
                 />
                 <div>
-                  <h2 className="text-xl font-bold">{firstName} {lastName}</h2>
+                  <h2 className="text-xl font-bold">
+                    {firstName} {lastName}
+                  </h2>
                   <p className="text-sm text-base-content/60 flex items-center gap-1 mt-1">
-                    <Terminal size={14} className="text-primary" /> {age} years old
+                    <Terminal size={14} className="text-primary" /> {age} years
+                    old
                   </p>
                 </div>
               </div>
@@ -96,11 +107,18 @@ const Connections = () => {
 
               <div className="flex flex-wrap gap-2 mb-6">
                 {skillsArray.slice(0, 3).map((skill, idx) => (
-                  <span key={idx} className="badge badge-sm badge-outline text-xs py-2">
+                  <span
+                    key={idx}
+                    className="badge badge-sm badge-outline text-xs py-2"
+                  >
                     <Code2 size={10} className="mr-1" /> {skill}
                   </span>
                 ))}
-                {skillsArray.length > 3 && <span className="badge badge-sm badge-ghost text-xs py-2">+{skillsArray.length - 3}</span>}
+                {skillsArray.length > 3 && (
+                  <span className="badge badge-sm badge-ghost text-xs py-2">
+                    +{skillsArray.length - 3}
+                  </span>
+                )}
               </div>
 
               <button className="btn btn-primary w-full shadow-lg shadow-primary/20 hover:-translate-y-1 transition-transform border-none rounded-xl">

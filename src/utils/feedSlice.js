@@ -8,6 +8,9 @@ const feedSlice = createSlice({
       return action.payload;
     },
     removeUserFromFeed: (state, action) => {
+      // 🛡️ FIX: Prevent 'null.filter is not a function' crash
+      if (!state) return state;
+
       const newFeed = state.filter((user) => user._id !== action.payload);
       return newFeed;
     },

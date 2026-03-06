@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import feedReducer from "./feedSlice";
-import connectionReducer from "./connectionSlics";
+import connectionReducer from "./connectionSlice"; // 🐛 FIX: Typo corrected!
 import requestReducer from "./requestSlice";
 
 const appStore = configureStore({
