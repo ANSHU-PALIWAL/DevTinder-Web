@@ -21,9 +21,12 @@ const Body = () => {
       });
       dispatch(addUser(res.data));
     } catch (error) {
-      // RULE 1: If the API fails (401 Unauthorized), and they are NOT already on the login page, kick them to /login
-      // Note: Changed to error.response?.status to prevent undefined crashes
-      if (error.response?.status === 401 && location.pathname !== "/login") {
+      // RULE 1: If the API fails (401) OR the server is completely offline (Network Error)
+      // error.response is undefined when the server is dead!
+      const isUnauthorized = error.response?.status === 401;
+      const isServerDown = !error.response;
+
+      if ((isUnauthorized || isServerDown) && location.pathname !== "/login") {
         navigate("/login");
       }
       console.error("Auth check failed:", error.message);
@@ -47,17 +50,17 @@ const Body = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-base-100 text-base-content font-sans">
-      
       {/* Only show NavBar if we are NOT on the login page */}
       {!isLoginPage && <NavBar />}
-      
-      <main className={`flex-grow flex flex-col ${!isLoginPage ? "pt-20 pb-8 px-4 sm:px-6 lg:px-8" : ""}`}>
+
+      <main
+        className={`flex-grow flex flex-col ${!isLoginPage ? "pt-20 pb-8 px-4 sm:px-6 lg:px-8" : ""}`}
+      >
         <Outlet />
       </main>
 
       {/* Only show Footer if we are NOT on the login page */}
       {!isLoginPage && <Footer />}
-      
     </div>
   );
 };
