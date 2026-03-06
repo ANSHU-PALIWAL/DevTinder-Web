@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 
 const EditProfile = ({ user }) => {
+  const [gallery, setGallery] = useState(user.gallery || []);
+
   const [firstName, setFirstName] = useState(user.firstName || "");
   const [lastName, setLastName] = useState(user.lastName || "");
   const [age, setAge] = useState(user.age || "");
@@ -51,13 +53,39 @@ const EditProfile = ({ user }) => {
     }
   };
 
+  const handleGalleryUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (gallery.length >= 4) {
+      setError("You can only upload a maximum of 4 images to your gallery.");
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      setError("Gallery images must be less than 2MB.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setGallery([...gallery, reader.result]);
+      setError("");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeGalleryImage = (indexToRemove) => {
+    setGallery(gallery.filter((_, index) => index !== indexToRemove));
+  };
+
   const updateProfile = async () => {
     setError("");
     setIsSaving(true);
     try {
       const res = await axios.patch(
         API_BASE_URL + "/profile/edit",
-        { firstName, lastName, about, age, gender, photoUrl, skills },
+        { firstName, lastName, about, age, gender, photoUrl, skills, gallery },
         { withCredentials: true },
       );
 
@@ -233,6 +261,48 @@ const EditProfile = ({ user }) => {
                 <UploadCloud size={14} /> JPEG, PNG up to 2MB
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* --- GALLERY UPLOAD --- */}
+        <div className="form-control mt-6">
+          <label className="label">
+            <span className="label-text font-medium text-base-content/80">
+              Gallery Images ({gallery.length}/4)
+            </span>
+          </label>
+          <div className="bg-base-200/50 p-4 rounded-2xl border border-base-300">
+            {/* Display current gallery */}
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+              {gallery.map((img, idx) => (
+                <div
+                  key={idx}
+                  className="relative min-w-[80px] h-20 rounded-xl overflow-hidden border border-base-300"
+                >
+                  <img
+                    src={img}
+                    className="w-full h-full object-cover"
+                    alt="gallery item"
+                  />
+                  <button
+                    onClick={() => removeGalleryImage(idx)}
+                    className="absolute top-1 right-1 bg-error text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Upload Button */}
+            {gallery.length < 4 && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleGalleryUpload}
+                className="file-input file-input-bordered file-input-sm w-full shadow-sm"
+              />
+            )}
           </div>
         </div>
 

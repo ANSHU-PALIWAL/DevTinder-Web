@@ -1,14 +1,23 @@
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
-import { Code2, LogOut, Settings, User as UserIcon, Users, UserPlus } from "lucide-react";
+import {
+  Code2,
+  LogOut,
+  Settings,
+  User as UserIcon,
+  Users,
+  UserPlus,
+  Home,
+} from "lucide-react";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -20,8 +29,12 @@ const NavBar = () => {
     }
   };
 
+  // Helper function to check if a tab is active
+  const isActive = (path) => location.pathname === path;
+
   return (
     <div className="navbar bg-base-300/80 backdrop-blur-xl border-b border-base-200/50 fixed top-0 w-full z-50 px-4 sm:px-8 transition-all duration-300">
+      {/* Logo Section */}
       <div className="flex-1">
         <Link
           to="/"
@@ -31,29 +44,77 @@ const NavBar = () => {
             className="text-primary group-hover:rotate-12 transition-transform duration-300"
             size={32}
           />
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
+          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent group-hover:opacity-80 transition-opacity hidden sm:block">
             DevTinder
           </span>
         </Link>
       </div>
 
       {user && (
-        <div className="flex gap-4 items-center">
-          <p className="hidden sm:block font-medium text-sm tracking-wide text-base-content/80">
+        <div className="flex gap-2 sm:gap-6 items-center">
+          {/* Main Navigation Links (Desktop) */}
+          <div className="hidden md:flex items-center gap-2 mr-4">
+            <Link
+              to="/"
+              className={`btn btn-ghost btn-sm rounded-xl gap-2 ${isActive("/") ? "bg-base-200 text-primary" : "text-base-content/80 hover:text-primary"}`}
+            >
+              <Home size={18} /> Feed
+            </Link>
+            <Link
+              to="/connections"
+              className={`btn btn-ghost btn-sm rounded-xl gap-2 ${isActive("/connections") ? "bg-base-200 text-primary" : "text-base-content/80 hover:text-primary"}`}
+            >
+              <Users size={18} /> Matches
+            </Link>
+            <Link
+              to="/requests"
+              className={`btn btn-ghost btn-sm rounded-xl gap-2 ${isActive("/requests") ? "bg-base-200 text-primary" : "text-base-content/80 hover:text-primary"}`}
+            >
+              <UserPlus size={18} /> Requests
+            </Link>
+          </div>
+
+          {/* Mobile Navigation Icons (Shows only on small screens) */}
+          <div className="flex md:hidden items-center gap-1 mr-2">
+            <Link
+              to="/"
+              className={`btn btn-ghost btn-circle btn-sm ${isActive("/") ? "text-primary bg-base-200" : "text-base-content/80"}`}
+            >
+              <Home size={18} />
+            </Link>
+            <Link
+              to="/connections"
+              className={`btn btn-ghost btn-circle btn-sm ${isActive("/connections") ? "text-primary bg-base-200" : "text-base-content/80"}`}
+            >
+              <Users size={18} />
+            </Link>
+            <Link
+              to="/requests"
+              className={`btn btn-ghost btn-circle btn-sm ${isActive("/requests") ? "text-primary bg-base-200" : "text-base-content/80"}`}
+            >
+              <UserPlus size={18} />
+            </Link>
+          </div>
+
+          <p className="hidden lg:block font-medium text-sm tracking-wide text-base-content/80 mr-2">
             Welcome,{" "}
             <span className="text-primary font-bold">{user.firstName}</span>
           </p>
 
+          {/* User Profile Dropdown */}
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle avatar ring-2 ring-transparent hover:ring-primary hover:ring-offset-base-100 hover:ring-offset-2 transition-all duration-300"
             >
-              <div className="w-10 rounded-full shadow-lg">
+              <div className="w-10 rounded-full shadow-lg bg-base-200">
                 <img
                   alt="User Photo"
-                  src={user.photoUrl || "https://via.placeholder.com/150"}
+                  src={
+                    user.photoUrl ||
+                    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+                  }
                 />
               </div>
             </div>
@@ -65,45 +126,20 @@ const NavBar = () => {
               <li>
                 <Link
                   to="/profile"
-                  className="flex justify-between items-center py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <UserIcon size={16} /> Edit Profile
-                  </div>
-                  <span className="badge badge-primary badge-sm shadow-sm shadow-primary/30">
-                    New
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/connections"
                   className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
                 >
-                  {/* Updated Icon and Text */}
-                  <Users size={16} /> My Matches
+                  <UserIcon size={16} /> My Profile
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/requests"
-                  className="flex justify-between items-center py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
-                >
-                   {/* Updated Icon and Text */}
-                  <div className="flex items-center gap-3">
-                    <UserPlus size={16} /> Pending Requests
-                  </div>
-                </Link>
-              </li>
-              <div className="h-[1px] bg-base-300 w-full my-1"></div>
-              <li>
-                <Link 
                   to="/settings"
                   className="flex items-center gap-3 py-3 hover:bg-base-300 hover:text-primary rounded-xl transition-colors"
                 >
                   <Settings size={16} /> Account Settings
                 </Link>
               </li>
+              <div className="h-[1px] bg-base-300 w-full my-1"></div>
               <li>
                 <a
                   onClick={handleLogout}
