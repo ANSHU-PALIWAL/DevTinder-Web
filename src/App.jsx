@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Body from "./components/Body";
+import Feed from "./components/Feed";
 import Login from "./components/Login";
-import ProfileView from "./components/ProfileView"; // 1. The read-only gallery view
-import Profile from "./components/Profile";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
-import Feed from "./components/Feed";
-import Connections from "./components/Connections";
+import Profile from "./components/Profile";
 import Requests from "./components/Requests";
 import Settings from "./components/Settings";
-import NotFound from "./components/NotFound"; // 1. Import the new component!
+import NotFound from "./components/NotFound";
+import Connections from "./components/Connections";
+import ProfileView from "./components/ProfileView";
+import PublicProfile from "./components/PublicProfile";
 
 function App() {
   return (
@@ -20,13 +21,14 @@ function App() {
             <Route path="/" element={<Body />}>
               <Route path="/" element={<Feed />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/requests" element={<Requests />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="/profile" element={<ProfileView />} />
               <Route path="/profile/edit" element={<Profile />} />
               <Route path="/connections" element={<Connections />} />
-              <Route path="/requests" element={<Requests />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/match/profile" element={<PublicProfile />} />
 
-              {/* 2. Catch-All Route: Must be the very last route! */}
+              {/* Catch-All Route: Must be the very last route! */}
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

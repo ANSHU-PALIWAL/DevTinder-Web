@@ -2,9 +2,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import { API_BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addConnections } from "../utils/connectionSlice"; // Ensure this path is correct!
+import { addConnections } from "../utils/connectionSlice";
 import { motion } from "framer-motion";
-import { Users, MessageSquare, Terminal, Code2 } from "lucide-react";
+import { Users, MessageSquare, Terminal, Code2, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Connections = () => {
   const connections = useSelector((store) => store.connections);
@@ -17,7 +18,6 @@ const Connections = () => {
       });
       dispatch(addConnections(res.data.data));
     } catch (error) {
-      // 🛡️ FIX: Clean console error logging
       console.error(
         "Error fetching connections:",
         error.response?.data?.message || error.message,
@@ -74,7 +74,9 @@ const Connections = () => {
           const { _id, firstName, lastName, photoUrl, age, skills, about } =
             connection;
           const skillsArray = Array.isArray(skills) ? skills : [];
-          const displayImage = photoUrl || "https://via.placeholder.com/150";
+          const displayImage =
+            photoUrl ||
+            "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg";
 
           return (
             <motion.div
@@ -121,10 +123,20 @@ const Connections = () => {
                 )}
               </div>
 
-              <button className="btn btn-primary w-full shadow-lg shadow-primary/20 hover:-translate-y-1 transition-transform border-none rounded-xl">
-                <MessageSquare size={18} />
-                Message
-              </button>
+              <div className="flex gap-3 w-full mt-auto">
+                <button className="btn btn-primary flex-1 shadow-lg shadow-primary/20 hover:-translate-y-1 transition-transform border-none rounded-xl">
+                  <MessageSquare size={18} />
+                  Message
+                </button>
+                <Link
+                  to="/match/profile"
+                  state={{ user: connection }}
+                  className="btn btn-outline btn-primary flex-1 hover:-translate-y-1 transition-transform rounded-xl"
+                >
+                  <User size={18} />
+                  Profile
+                </Link>
+              </div>
             </motion.div>
           );
         })}
