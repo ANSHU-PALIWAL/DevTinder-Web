@@ -13,6 +13,7 @@ import {
   UserCircle,
   Save,
   CheckCircle2,
+  UploadCloud,
 } from "lucide-react";
 
 const EditProfile = ({ user }) => {
@@ -28,6 +29,27 @@ const EditProfile = ({ user }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const dispatch = useDispatch();
+
+  // --- NEW: FILE UPLOAD HANDLER ---
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // 1. Check file size (Let's restrict to 2MB to keep your database happy)
+      if (file.size > 2 * 1024 * 1024) {
+        setError("Image size must be less than 2MB.");
+        return;
+      }
+
+      // 2. Convert the image file to a Base64 string
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // This sets the photoUrl state to a massive string representing the image
+        setPhotoUrl(reader.result);
+        setError(""); // Clear any previous errors
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const updateProfile = async () => {
     setError("");
@@ -56,7 +78,7 @@ const EditProfile = ({ user }) => {
         <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
       </div>
 
-      {/* LEFT COLUMN: The Form (Takes up 7 cols on large screens) */}
+      {/* LEFT COLUMN: The Form */}
       <div className="lg:col-span-7 flex flex-col space-y-6">
         <div>
           <h2 className="text-3xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
@@ -131,7 +153,7 @@ const EditProfile = ({ user }) => {
             </div>
           </div>
 
-          {/* Gender (NOW A DROPDOWN) */}
+          {/* Gender */}
           <div className="form-control">
             <label className="label">
               <span className="label-text font-medium text-base-content/80">
@@ -148,7 +170,6 @@ const EditProfile = ({ user }) => {
                 onChange={(e) => setGender(e.target.value)}
                 className="select select-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
               >
-                {/* We added solid backgrounds (bg-base-300) to all options to prevent transparency overlap! */}
                 <option
                   value=""
                   disabled
@@ -173,25 +194,38 @@ const EditProfile = ({ user }) => {
           </div>
         </div>
 
-        {/* Photo URL */}
+        {/* --- NEW: INTERACTIVE PHOTO UPLOAD --- */}
         <div className="form-control">
           <label className="label">
             <span className="label-text font-medium text-base-content/80">
-              Profile Photo URL
+              Profile Photo
             </span>
           </label>
-          <div className="relative">
-            <ImageIcon
-              size={18}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
-            />
-            <input
-              type="text"
-              value={photoUrl}
-              placeholder="https://..."
-              onChange={(e) => setPhotoUrl(e.target.value)}
-              className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
-            />
+          <div className="flex items-center gap-4 bg-base-200/50 p-3 rounded-2xl border border-base-300">
+            {/* Small Preview Avatar */}
+            <div className="avatar">
+              <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-lg">
+                <img
+                  src={
+                    photoUrl ||
+                    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+                  }
+                  alt="Avatar Preview"
+                />
+              </div>
+            </div>
+            {/* DaisyUI File Input */}
+            <div className="flex-1">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="file-input file-input-bordered file-input-primary w-full shadow-sm"
+              />
+              <p className="text-xs text-base-content/50 mt-2 px-1 flex items-center gap-1">
+                <UploadCloud size={14} /> JPEG, PNG up to 2MB
+              </p>
+            </div>
           </div>
         </div>
 
@@ -259,7 +293,7 @@ const EditProfile = ({ user }) => {
         </button>
       </div>
 
-      {/* RIGHT COLUMN: Live Preview (Takes up 5 cols) */}
+      {/* RIGHT COLUMN: Live Preview */}
       <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-start mt-10 lg:mt-0 relative">
         <div className="sticky top-28 w-full max-w-sm flex flex-col items-center mx-auto">
           <p className="text-sm font-bold uppercase tracking-widest text-base-content/40 mb-4 flex items-center gap-2">
