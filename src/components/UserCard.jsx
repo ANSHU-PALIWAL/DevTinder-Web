@@ -6,8 +6,8 @@ import { removeUserFromFeed } from "../utils/feedSlice";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Code2, Heart, X, Terminal } from "lucide-react";
 
-// Added isInteractive default so it can still be used in EditProfile as a preview!
-const UserCard = ({ user, isInteractive = true }) => {
+// 🚀 ADDED: 'onAction' prop to trigger cleanup when used inside the Radar Modal
+const UserCard = ({ user, isInteractive = true, onAction }) => {
   const {
     _id = "preview",
     firstName = "Developer",
@@ -21,7 +21,6 @@ const UserCard = ({ user, isInteractive = true }) => {
 
   const dispatch = useDispatch();
 
-  // Your exact API logic!
   const handleSendRequest = async (status, UserId) => {
     try {
       const res = await axios.post(
@@ -30,8 +29,10 @@ const UserCard = ({ user, isInteractive = true }) => {
         { withCredentials: true },
       );
       dispatch(removeUserFromFeed(UserId));
+
+      // 🚀 THE MAGIC: Tell the parent component (Radar) that a swipe happened!
+      if (onAction) onAction(UserId);
     } catch (error) {
-      // 🛡️ FIX: Clean console error logging
       console.error(
         "Error sending connection request:",
         error.response?.data?.message || error.message,
@@ -39,7 +40,6 @@ const UserCard = ({ user, isInteractive = true }) => {
     }
   };
 
-  // --- Framer Motion Swipe Physics ---
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-10, 10]);
   const likeOpacity = useTransform(x, [0, 100], [0, 1]);
@@ -50,9 +50,9 @@ const UserCard = ({ user, isInteractive = true }) => {
     const swipeThreshold = 100;
 
     if (info.offset.x > swipeThreshold) {
-      handleSendRequest("interested", _id); // Swiped Right
+      handleSendRequest("interested", _id);
     } else if (info.offset.x < -swipeThreshold) {
-      handleSendRequest("ignored", _id); // Swiped Left
+      handleSendRequest("ignored", _id);
     }
   };
 
@@ -78,14 +78,12 @@ const UserCard = ({ user, isInteractive = true }) => {
       onDragEnd={handleDragEnd}
       whileTap={isInteractive ? { scale: 0.98 } : {}}
     >
-      {/* Profile Image */}
       <img
         src={displayImage}
         alt="Profile"
         className="absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
 
-      {/* Dynamic Swipe Overlays */}
       <motion.div
         style={{ opacity: likeOpacity }}
         className="absolute inset-0 bg-success/20 z-10 pointer-events-none flex items-center justify-center"
@@ -103,10 +101,8 @@ const UserCard = ({ user, isInteractive = true }) => {
         </h1>
       </motion.div>
 
-      {/* Dark Gradient Overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-base-300 via-base-300/80 to-transparent z-0 h-full mt-20"></div>
 
-      {/* Profile Details */}
       <div className="absolute bottom-0 w-full p-6 z-20 text-white flex flex-col gap-2">
         <div>
           <h2 className="text-3xl font-extrabold flex items-center gap-2 drop-shadow-md">
@@ -123,7 +119,6 @@ const UserCard = ({ user, isInteractive = true }) => {
           {about}
         </p>
 
-        {/* Skills Badges */}
         <div className="flex flex-wrap gap-2 mt-2">
           {skillsArray.slice(0, 3).map(
             (skill, index) =>
@@ -143,7 +138,6 @@ const UserCard = ({ user, isInteractive = true }) => {
           )}
         </div>
 
-        {/* Action Buttons (For manual clicks) */}
         {isInteractive && (
           <div className="flex justify-center items-center w-full mt-4 gap-6">
             <button

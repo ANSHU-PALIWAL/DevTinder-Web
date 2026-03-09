@@ -2,14 +2,26 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { MapPin, Navigation, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Navigation, AlertCircle, X } from "lucide-react"; // 👈 Added X
+import UserCard from "./UserCard"; // 👈 Imported your UserCard!
+
+const hashStr = (str) => {
+  let hash = 0;
+  for (let i = 0; i < str?.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return Math.abs(hash);
+};
 
 const RadarView = () => {
   const [nearbyUsers, setNearbyUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // 🚀 NEW STATE: Tracks which user the modal is open for
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const loggedInUser = useSelector((store) => store.user);
 
   useEffect(() => {
@@ -56,7 +68,6 @@ const RadarView = () => {
     );
   }
 
-  // --- STRICT RING MATH ---
   const RINGS = [
     { maxDist: 2000, radius: 130, label: "0 - 2km" }, // 0 - 2km
     { maxDist: 5000, radius: 180, label: "2 - 5km" }, // 2 - 5km
@@ -88,15 +99,11 @@ const RadarView = () => {
       </div>
 
       <div className="relative w-[600px] h-[600px] flex items-center justify-center bg-base-300/20 rounded-full border border-base-200 shadow-2xl scale-[0.6] sm:scale-75 md:scale-100 origin-center transition-transform">
-        {/* Render the Visual Concentric Circles & Labels */}
         {RINGS.map((ring, idx) => (
           <div
             key={idx}
             className="absolute rounded-full border border-primary/20 pointer-events-none flex items-start justify-center"
-            style={{
-              width: ring.radius * 2,
-              height: ring.radius * 2,
-            }}
+            style={{ width: ring.radius * 2, height: ring.radius * 2 }}
           >
             <span className="text-[10px] font-bold text-primary/40 bg-base-100/80 px-1 rounded -mt-2 backdrop-blur-sm z-0">
               {ring.label}
@@ -104,14 +111,12 @@ const RadarView = () => {
           </div>
         ))}
 
-        {/* Pulsing Center Effect */}
         <motion.div
           animate={{ scale: [1, 2, 3], opacity: [0.5, 0.2, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
           className="absolute w-20 h-20 bg-primary/30 rounded-full pointer-events-none"
         />
 
-        {/* Center Node (You) */}
         <div className="absolute z-20 flex flex-col items-center justify-center pointer-events-none">
           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full ring-4 ring-primary bg-base-200 overflow-hidden shadow-xl shadow-primary/20">
             <img
@@ -128,19 +133,14 @@ const RadarView = () => {
           </span>
         </div>
 
-        {/* Render Users EXACTLY on Their Rings */}
         {ringGroups.map((group, ringIndex) => {
           const ringRadius = RINGS[ringIndex].radius;
 
           return group.map((user, userIndex) => {
-            // Calculate a perfect, even spread around the 360-degree circle
             const angle =
               (userIndex * (Math.PI * 2)) / group.length + ringIndex * 0.5;
-
-            // Lock the distance exactly to the visual ring line (no wiggle!)
             const finalRadius = ringRadius;
 
-            // X and Y coordinates
             const targetX = Math.cos(angle) * finalRadius;
             const targetY = Math.sin(angle) * finalRadius;
 
@@ -149,9 +149,7 @@ const RadarView = () => {
             return (
               <motion.div
                 key={user._id}
-                // 🚀 START AT THE CENTER
                 initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-                // 🚀 LET FRAMER MOTION HANDLE THE TRANSLATE
                 animate={{ scale: 1, opacity: 1, x: targetX, y: targetY }}
                 transition={{
                   delay: userIndex * 0.1 + ringIndex * 0.2,
@@ -161,10 +159,9 @@ const RadarView = () => {
                 }}
                 className="absolute z-40 flex flex-col items-center group cursor-pointer hover:z-50"
               >
-                {/* Profile Link Bubble */}
-                <Link
-                  to="/match/profile"
-                  state={{ user }}
+                {/* 🚀 FIXED: Replaced <Link> with a clickable trigger that opens the Modal! */}
+                <div
+                  onClick={() => setSelectedUser(user)}
                   className="relative pointer-events-auto"
                 >
                   <div className="w-12 h-12 md:w-14 md:h-14 rounded-full ring-2 ring-secondary bg-base-200 overflow-hidden shadow-lg transition-transform group-hover:scale-125 group-hover:ring-4">
@@ -178,14 +175,12 @@ const RadarView = () => {
                     />
                   </div>
 
-                  {/* Distance Badge */}
                   <div className="absolute -bottom-2 -right-4 bg-base-300 border border-base-200 text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full shadow-md flex items-center gap-1 z-20">
                     <MapPin size={10} className="text-secondary" />
                     {distanceKm}km
                   </div>
-                </Link>
+                </div>
 
-                {/* Hover Info Tooltip */}
                 <div className="absolute top-16 opacity-0 group-hover:opacity-100 transition-opacity bg-base-300 border border-base-200 px-3 py-1.5 rounded-xl shadow-2xl pointer-events-none w-max text-center z-50">
                   <p className="font-bold text-xs md:text-sm">
                     {user.firstName} {user.lastName}
@@ -198,13 +193,41 @@ const RadarView = () => {
             );
           });
         })}
-
-        {nearbyUsers.length === 0 && !loading && !error && (
-          <div className="absolute -bottom-20 text-center text-base-content/50">
-            No developers found within 100km.
-          </div>
-        )}
       </div>
+
+      {/* 📸 NEW: The Swipe Modal! */}
+      <AnimatePresence>
+        {selectedUser && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-base-300/80 backdrop-blur-md p-4"
+          >
+            <div className="relative w-full max-w-sm">
+              <button
+                onClick={() => setSelectedUser(null)}
+                className="absolute -top-14 right-0 btn btn-circle btn-sm bg-base-100 border-base-300 hover:bg-base-200 text-base-content shadow-xl z-50"
+              >
+                <X size={20} />
+              </button>
+
+              <UserCard
+                user={selectedUser}
+                isInteractive={true}
+                onAction={(userId) => {
+                  // Hide the user from the radar instantly
+                  setNearbyUsers((prev) =>
+                    prev.filter((u) => u._id !== userId),
+                  );
+                  // Close the modal
+                  setSelectedUser(null);
+                }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
