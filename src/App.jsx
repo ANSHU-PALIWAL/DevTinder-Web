@@ -8,6 +8,7 @@ import Profile from "./components/Profile";
 import Requests from "./components/Requests";
 import Settings from "./components/Settings";
 import NotFound from "./components/NotFound";
+import RadarView from "./components/RadarView";
 import Connections from "./components/Connections";
 import ProfileView from "./components/ProfileView";
 import PublicProfile from "./components/PublicProfile";
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Body />}>
               <Route path="/" element={<Feed />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/radar" element={<RadarView />} />
               <Route path="/requests" element={<Requests />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/profile" element={<ProfileView />} />

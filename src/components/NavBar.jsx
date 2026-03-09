@@ -11,6 +11,7 @@ import {
   Users,
   UserPlus,
   Home,
+  Navigation,
 } from "lucide-react";
 
 const NavBar = () => {
@@ -61,6 +62,12 @@ const NavBar = () => {
               <Home size={18} /> Feed
             </Link>
             <Link
+              to="/radar"
+              className={`btn btn-ghost btn-sm rounded-xl gap-2 ${isActive("/radar") ? "bg-base-200 text-primary" : "text-base-content/80 hover:text-primary"}`}
+            >
+              <Navigation size={18} /> Radar
+            </Link>
+            <Link
               to="/connections"
               className={`btn btn-ghost btn-sm rounded-xl gap-2 ${isActive("/connections") ? "bg-base-200 text-primary" : "text-base-content/80 hover:text-primary"}`}
             >
@@ -81,6 +88,12 @@ const NavBar = () => {
               className={`btn btn-ghost btn-circle btn-sm ${isActive("/") ? "text-primary bg-base-200" : "text-base-content/80"}`}
             >
               <Home size={18} />
+            </Link>
+            <Link
+              to="/radar"
+              className={`btn btn-ghost btn-circle btn-sm ${isActive("/radar") ? "text-primary bg-base-200" : "text-base-content/80"}`}
+            >
+              <Navigation size={18} />
             </Link>
             <Link
               to="/connections"

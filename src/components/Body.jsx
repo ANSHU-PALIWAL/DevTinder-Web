@@ -22,7 +22,6 @@ const Body = () => {
       dispatch(addUser(res.data));
     } catch (error) {
       // RULE 1: If the API fails (401) OR the server is completely offline (Network Error)
-      // error.response is undefined when the server is dead!
       const isUnauthorized = error.response?.status === 401;
       const isServerDown = !error.response;
 
@@ -30,6 +29,32 @@ const Body = () => {
         navigate("/login");
       }
       console.error("Auth check failed:", error.message);
+    }
+  };
+
+  // 🌍 NEW: Silent Background GPS Tracker
+  const updateLocation = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            await axios.patch(
+              API_BASE_URL + "/profile/location",
+              { lat: latitude, lng: longitude },
+              { withCredentials: true },
+            );
+            // Silently succeeds in the background!
+          } catch (error) {
+            console.error("Failed to sync location:", error);
+          }
+        },
+        (error) => {
+          // If the user clicks "Block" on the location prompt, we just catch it gracefully.
+          console.warn("Location access denied or unavailable:", error.message);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 },
+      );
     }
   };
 
@@ -42,6 +67,11 @@ const Body = () => {
     // If the user IS logged in, and tries to visit the login page, kick them to the Feed (/)
     if (userData && location.pathname === "/login") {
       navigate("/");
+    }
+
+    // 🚀 TRIGGER: If the user is logged in successfully, ask for their location!
+    if (userData) {
+      updateLocation();
     }
   }, [userData, location.pathname, navigate]);
 
