@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFeed } from "../utils/feedSlice";
 import UserCard from "./UserCard";
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalSquare } from "lucide-react";
+import { Compass } from "lucide-react";
 
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
@@ -17,14 +17,9 @@ const Feed = () => {
       const res = await axios.get(API_BASE_URL + "/feed", {
         withCredentials: true,
       });
-      // Your logic: taking the nested data array
       dispatch(addFeed(res?.data?.data));
     } catch (error) {
-      // 🛡️ FIX: Clean console error logging
-      console.error(
-        "Error fetching feed:",
-        error.response?.data?.message || error.message,
-      );
+      console.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -32,45 +27,41 @@ const Feed = () => {
     getFeed();
   }, []);
 
-  // 1. Loading State
   if (!feed) {
     return (
       <div className="flex-grow flex items-center justify-center min-h-[75vh]">
-        <span className="loading loading-bars loading-lg text-primary"></span>
+        <span className="loading loading-bars loading-lg text-emerald-500"></span>
       </div>
     );
   }
 
-  // 2. Premium Empty State
   if (feed.length <= 0) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center text-center p-4 min-h-[75vh]">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-base-300/50 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-base-200 max-w-md w-full"
+          className="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-100 max-w-md w-full"
         >
-          <div className="bg-base-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-            <TerminalSquare size={36} className="text-primary opacity-50" />
+          <div className="bg-emerald-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-emerald-100">
+            <Compass size={36} className="text-emerald-500" />
           </div>
-          <h1 className="text-3xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-            Out of Devs!
+          <h1 className="text-3xl font-extrabold mb-3 text-slate-800 tracking-tight">
+            You're all caught up!
           </h1>
-          <p className="text-base-content/60 leading-relaxed mb-6">
-            You've reviewed all developers in your area. Update your profile or
-            check back later to find more pair-programming matches.
+          <p className="text-slate-500 leading-relaxed mb-6 font-medium">
+            You have seen all the neighbors in your current radius. Update your
+            profile or check back later to connect with new people nearby.
           </p>
         </motion.div>
       </div>
     );
   }
 
-  // 3. The 3D Stacked Deck UI
   return (
     <div className="flex-grow flex items-center justify-center w-full min-h-[75vh] pb-10 overflow-hidden">
       <div className="relative w-full max-w-sm h-[550px]">
         <AnimatePresence>
-          {/* Slicing to show only 3 cards max for performance, reversing to stack correctly */}
           {[...feed]
             .slice(0, 3)
             .reverse()

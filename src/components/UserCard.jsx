@@ -4,13 +4,12 @@ import { API_BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { Code2, Heart, X, Terminal } from "lucide-react";
+import { User as UserIcon, Heart, X } from "lucide-react";
 
-// 🚀 ADDED: 'onAction' prop to trigger cleanup when used inside the Radar Modal
 const UserCard = ({ user, isInteractive = true, onAction }) => {
   const {
     _id = "preview",
-    firstName = "Developer",
+    firstName = "Neighbor",
     lastName = "",
     photoUrl = "",
     age = "0",
@@ -30,13 +29,9 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
       );
       dispatch(removeUserFromFeed(UserId));
 
-      // 🚀 THE MAGIC: Tell the parent component (Radar) that a swipe happened!
       if (onAction) onAction(UserId);
     } catch (error) {
-      console.error(
-        "Error sending connection request:",
-        error.response?.data?.message || error.message,
-      );
+      console.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -62,13 +57,14 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
       : Array.isArray(skills)
         ? skills
         : [];
+
   const displayImage =
     photoUrl ||
     "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg";
 
   return (
     <motion.div
-      className={`relative w-full max-w-sm h-[550px] rounded-[2rem] overflow-hidden shadow-2xl bg-base-300 border border-base-200/50 ${
+      className={`relative w-full max-w-sm h-[550px] rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.12)] bg-white border border-slate-100 ${
         isInteractive ? "cursor-grab active:cursor-grabbing" : ""
       }`}
       style={{ x: isInteractive ? x : 0, rotate: isInteractive ? rotate : 0 }}
@@ -86,71 +82,72 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
 
       <motion.div
         style={{ opacity: likeOpacity }}
-        className="absolute inset-0 bg-success/20 z-10 pointer-events-none flex items-center justify-center"
+        className="absolute inset-0 bg-emerald-500/20 z-10 pointer-events-none flex items-center justify-center"
       >
-        <h1 className="text-5xl font-black text-success border-4 border-success p-4 rounded-xl rotate-12 backdrop-blur-sm tracking-widest shadow-lg shadow-success/50">
-          COMMIT
+        <h1 className="text-5xl font-black text-emerald-500 border-4 border-emerald-500 px-6 py-4 rounded-3xl rotate-12 backdrop-blur-md tracking-widest shadow-2xl">
+          CONNECT
         </h1>
       </motion.div>
       <motion.div
         style={{ opacity: nopeOpacity }}
-        className="absolute inset-0 bg-error/20 z-10 pointer-events-none flex items-center justify-center"
+        className="absolute inset-0 bg-rose-500/20 z-10 pointer-events-none flex items-center justify-center"
       >
-        <h1 className="text-5xl font-black text-error border-4 border-error p-4 rounded-xl -rotate-12 backdrop-blur-sm tracking-widest shadow-lg shadow-error/50">
-          DROP
+        <h1 className="text-5xl font-black text-rose-500 border-4 border-rose-500 px-6 py-4 rounded-3xl -rotate-12 backdrop-blur-md tracking-widest shadow-2xl">
+          PASS
         </h1>
       </motion.div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-base-300 via-base-300/80 to-transparent z-0 h-full mt-20"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent z-0 h-full mt-20"></div>
 
-      <div className="absolute bottom-0 w-full p-6 z-20 text-white flex flex-col gap-2">
+      <div className="absolute bottom-0 w-full p-6 z-20 text-white flex flex-col gap-3">
         <div>
-          <h2 className="text-3xl font-extrabold flex items-center gap-2 drop-shadow-md">
+          <h2 className="text-3xl font-extrabold flex items-center gap-2 drop-shadow-md text-white leading-tight">
             {firstName} {lastName}
           </h2>
           {age && gender && (
-            <p className="text-sm font-medium text-gray-300 flex items-center gap-2 mt-1 uppercase tracking-wider">
-              <Terminal size={14} className="text-primary" /> {age} • {gender}
+            <p className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 mt-2 uppercase tracking-widest">
+              <UserIcon size={14} className="text-emerald-400" /> {age} •{" "}
+              {gender}
             </p>
           )}
         </div>
 
-        <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed opacity-90">
+        <p className="text-sm text-slate-200 line-clamp-2 leading-relaxed font-medium">
           {about}
         </p>
 
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-2 mt-1">
           {skillsArray.slice(0, 3).map(
             (skill, index) =>
               skill.trim() && (
                 <span
                   key={index}
-                  className="badge badge-primary badge-outline border-primary/50 text-xs py-3 px-3 backdrop-blur-md bg-base-300/50 uppercase tracking-wider"
+                  className="px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest flex items-center shadow-sm"
                 >
-                  <Code2 size={12} className="mr-1" /> {skill.trim()}
+                  {skill.trim()}
                 </span>
               ),
           )}
           {skillsArray.length > 3 && (
-            <span className="badge badge-ghost text-xs py-3">
+            <span className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[10px] font-bold text-white uppercase tracking-widest">
               +{skillsArray.length - 3}
             </span>
           )}
         </div>
 
         {isInteractive && (
-          <div className="flex justify-center items-center w-full mt-4 gap-6">
+          <div className="flex justify-center items-center w-full mt-3 gap-6">
             <button
               onClick={() => handleSendRequest("ignored", _id)}
-              className="btn btn-circle btn-lg bg-base-300/80 backdrop-blur-md border-none text-error hover:bg-error hover:text-white transition-all hover:scale-110 shadow-xl"
+              className="w-14 h-14 flex items-center justify-center rounded-full bg-white text-rose-500 hover:bg-rose-50 transition-all hover:scale-110 shadow-xl cursor-pointer"
             >
-              <X size={32} strokeWidth={3} />
+              <X size={28} strokeWidth={3} />
             </button>
             <button
               onClick={() => handleSendRequest("interested", _id)}
-              className="btn btn-circle btn-lg bg-base-300/80 backdrop-blur-md border-none text-success hover:bg-success hover:text-white transition-all hover:scale-110 shadow-xl"
+              className="w-14 h-14 flex items-center justify-center rounded-full bg-emerald-500 text-white hover:bg-emerald-600 transition-all hover:scale-110 shadow-xl shadow-emerald-500/30 cursor-pointer"
             >
-              <Heart size={28} strokeWidth={3} className="fill-current" />
+              <Heart size={26} strokeWidth={3} className="fill-current" />
             </button>
           </div>
         )}
