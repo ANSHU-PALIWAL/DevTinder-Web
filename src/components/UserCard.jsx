@@ -64,7 +64,7 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
 
   return (
     <motion.div
-      className={`relative w-full max-w-sm h-[550px] rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.12)] bg-white border border-slate-100 ${
+      className={`relative w-full max-w-sm h-[550px] rounded-[2.5rem] overflow-hidden shadow-xl shadow-slate-200 border border-slate-100 bg-white ${
         isInteractive ? "cursor-grab active:cursor-grabbing" : ""
       }`}
       style={{ x: isInteractive ? x : 0, rotate: isInteractive ? rotate : 0 }}
@@ -97,7 +97,7 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
         </h1>
       </motion.div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent z-0 h-full mt-20"></div>
+      <div className="absolute bottom-0 left-0 w-full h-4/5 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent z-0 pointer-events-none"></div>
 
       <div className="absolute bottom-0 w-full p-6 z-20 text-white flex flex-col gap-3">
         <div>
