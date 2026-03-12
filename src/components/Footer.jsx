@@ -17,13 +17,24 @@ const Footer = () => {
       </div>
 
       <div className="flex gap-6">
-        <a className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <a
+          target="_blank"
+          href="https://github.com/ANSHU-PALIWAL"
+          className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+        >
           <Github size={20} />
         </a>
-        <a className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <a
+          href="#"
+          className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+        >
           <Twitter size={20} />
         </a>
-        <a className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+        <a
+          target="_blank"
+          href="https://www.linkedin.com/in/priyanshu-paliwal-017a6a262/"
+          className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+        >
           <Linkedin size={20} />
         </a>
       </div>

@@ -4,7 +4,7 @@ import { API_BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/connectionSlice";
 import { motion } from "framer-motion";
-import { Users, MessageSquare, Terminal, Code2, User } from "lucide-react";
+import { Users, MessageSquare, User as UserIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Connections = () => {
@@ -18,10 +18,7 @@ const Connections = () => {
       });
       dispatch(addConnections(res.data.data));
     } catch (error) {
-      console.error(
-        "Error fetching connections:",
-        error.response?.data?.message || error.message,
-      );
+      console.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -32,7 +29,7 @@ const Connections = () => {
   if (!connections) {
     return (
       <div className="flex-grow flex items-center justify-center min-h-[75vh]">
-        <span className="loading loading-bars loading-lg text-primary"></span>
+        <span className="loading loading-bars loading-lg text-emerald-500"></span>
       </div>
     );
   }
@@ -43,17 +40,17 @@ const Connections = () => {
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-base-300/50 backdrop-blur-md p-10 rounded-[2.5rem] shadow-2xl border border-base-200 max-w-md w-full"
+          className="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-100 max-w-md w-full"
         >
-          <div className="bg-base-200 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-            <Users size={36} className="text-primary opacity-50" />
+          <div className="bg-emerald-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-emerald-100">
+            <Users size={36} className="text-emerald-500" />
           </div>
-          <h1 className="text-3xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
-            No Connections Yet
+          <h1 className="text-3xl font-extrabold mb-3 text-slate-800 tracking-tight">
+            No Neighbors Yet
           </h1>
-          <p className="text-base-content/60 leading-relaxed mb-6">
-            Keep swiping! Once someone commits back to your profile, they will
-            appear here ready to chat.
+          <p className="text-slate-500 leading-relaxed mb-6 font-medium">
+            Keep exploring your local area! Once a neighbor connects back with
+            you, they will appear here ready to chat.
           </p>
         </motion.div>
       </div>
@@ -62,10 +59,12 @@ const Connections = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 sm:p-8 min-h-[85vh]">
-      <div className="mb-8 flex items-center gap-3">
-        <Users className="text-primary" size={32} />
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-          Your Network
+      <div className="mb-8 flex items-center gap-3 mt-4">
+        <div className="p-2.5 bg-emerald-50 rounded-xl">
+          <Users className="text-emerald-600" size={28} strokeWidth={2.5} />
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+          Your Neighbors
         </h1>
       </div>
 
@@ -84,26 +83,26 @@ const Connections = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-base-300/40 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-base-200/50 hover:border-primary/30 transition-all duration-300 flex flex-col"
+              className="bg-white rounded-[2rem] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-slate-100 hover:border-emerald-200 hover:shadow-[0_10px_40px_rgba(16,185,129,0.08)] transition-all duration-300 flex flex-col group"
             >
               <div className="flex items-center gap-4 mb-4">
                 <img
                   src={displayImage}
                   alt={`${firstName} ${lastName}`}
-                  className="w-20 h-20 rounded-full object-cover ring-2 ring-primary ring-offset-base-300 ring-offset-2 shadow-lg"
+                  className="w-20 h-20 rounded-full object-cover ring-4 ring-slate-50 group-hover:ring-emerald-50 transition-all shadow-sm"
                 />
                 <div>
-                  <h2 className="text-xl font-bold">
+                  <h2 className="text-xl font-bold text-slate-800 leading-tight">
                     {firstName} {lastName}
                   </h2>
-                  <p className="text-sm text-base-content/60 flex items-center gap-1 mt-1">
-                    <Terminal size={14} className="text-primary" /> {age} years
-                    old
+                  <p className="text-[11px] font-bold text-slate-400 flex items-center gap-1.5 mt-1.5 uppercase tracking-widest">
+                    <UserIcon size={14} className="text-emerald-500" /> {age}{" "}
+                    years old
                   </p>
                 </div>
               </div>
 
-              <p className="text-sm text-base-content/70 line-clamp-2 mb-4 flex-grow">
+              <p className="text-sm text-slate-500 font-medium line-clamp-2 mb-5 flex-grow leading-relaxed">
                 {about || "No bio available."}
               </p>
 
@@ -111,29 +110,29 @@ const Connections = () => {
                 {skillsArray.slice(0, 3).map((skill, idx) => (
                   <span
                     key={idx}
-                    className="badge badge-sm badge-outline text-xs py-2"
+                    className="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[10px] font-bold text-slate-500 uppercase tracking-widest"
                   >
-                    <Code2 size={10} className="mr-1" /> {skill}
+                    {skill}
                   </span>
                 ))}
                 {skillsArray.length > 3 && (
-                  <span className="badge badge-sm badge-ghost text-xs py-2">
+                  <span className="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                     +{skillsArray.length - 3}
                   </span>
                 )}
               </div>
 
               <div className="flex gap-3 w-full mt-auto">
-                <button className="btn btn-primary flex-1 shadow-lg shadow-primary/20 hover:-translate-y-1 transition-transform border-none rounded-xl">
+                <button className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                   <MessageSquare size={18} />
                   Message
                 </button>
                 <Link
                   to="/match/profile"
                   state={{ user: connection }}
-                  className="btn btn-outline btn-primary flex-1 hover:-translate-y-1 transition-transform rounded-xl"
+                  className="flex-1 py-3 bg-white border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-600 text-slate-600 font-bold text-sm rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2"
                 >
-                  <User size={18} />
+                  <UserIcon size={18} />
                   Profile
                 </Link>
               </div>

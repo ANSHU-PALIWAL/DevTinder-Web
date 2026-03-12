@@ -1,70 +1,101 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Terminal, Code2, MessageSquare } from "lucide-react";
+import { ArrowLeft, User as UserIcon, MessageSquare, Tag } from "lucide-react";
 
 const PublicProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
-  // Grab the user data we passed from the Connections page
+
   const user = location.state?.user;
 
-  // Fallback if someone tries to visit the URL directly without clicking the button
   if (!user) {
     return (
       <div className="flex-grow flex flex-col items-center justify-center min-h-[75vh]">
-        <h2 className="text-2xl font-bold mb-4">User profile not found</h2>
-        <button onClick={() => navigate(-1)} className="btn btn-primary">Go Back</button>
+        <h2 className="text-2xl font-extrabold mb-4 text-slate-800 tracking-tight">
+          Profile not found
+        </h2>
+        <button
+          onClick={() => navigate(-1)}
+          className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold shadow-lg shadow-emerald-500/30 transition-all active:scale-95"
+        >
+          Go Back
+        </button>
       </div>
     );
   }
 
-  const { firstName, lastName, photoUrl, about, skills, age, gender, gallery = [] } = user;
-  const displayImage = photoUrl || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg";
+  const {
+    firstName,
+    lastName,
+    photoUrl,
+    about,
+    skills,
+    age,
+    gender,
+    gallery = [],
+  } = user;
+  const displayImage =
+    photoUrl ||
+    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg";
+  const skillsArray = Array.isArray(skills)
+    ? skills
+    : typeof skills === "string"
+      ? skills.split(",")
+      : [];
 
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-8 min-h-[85vh]">
-      {/* Header Section */}
-      <div className="flex justify-between items-center mb-8">
-        <button onClick={() => navigate(-1)} className="btn btn-ghost gap-2 rounded-xl">
-          <ArrowLeft size={18} /> Back to Matches
+      <div className="flex justify-between items-center mb-8 mt-2">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all font-bold text-sm"
+        >
+          <ArrowLeft size={18} /> Back to Neighbors
         </button>
-        <button className="btn btn-primary shadow-lg shadow-primary/20 rounded-xl gap-2">
+        <button className="flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-500/30 transition-all active:scale-95">
           <MessageSquare size={18} /> Message {firstName}
         </button>
       </div>
 
-      <div className="bg-base-300/40 backdrop-blur-md rounded-[2.5rem] p-8 shadow-2xl border border-base-200/50">
+      <div className="bg-white rounded-[2.5rem] p-6 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-100">
         <div className="flex flex-col md:flex-row gap-8 items-start">
-          {/* Main Avatar */}
-          <img 
-            src={displayImage} 
-            alt="Profile" 
-            className="w-48 h-48 rounded-full object-cover ring-4 ring-primary ring-offset-base-300 ring-offset-4 shadow-2xl"
+          <img
+            src={displayImage}
+            alt="Profile"
+            className="w-40 h-40 sm:w-48 sm:h-48 rounded-full object-cover ring-8 ring-slate-50 shadow-xl flex-shrink-0 mx-auto md:mx-0"
           />
 
-          {/* User Info */}
-          <div className="flex-1 space-y-4 w-full">
+          <div className="flex-1 space-y-6 w-full text-center md:text-left">
             <div>
-              <h2 className="text-4xl font-bold flex items-center gap-3">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 {firstName} {lastName}
               </h2>
-              <p className="text-lg text-base-content/70 flex items-center gap-2 mt-2 font-medium uppercase tracking-wider">
-                <Terminal size={18} className="text-primary" /> {age} years old • {gender}
+              <p className="text-sm font-bold text-slate-400 flex items-center justify-center md:justify-start gap-1.5 mt-2 uppercase tracking-widest">
+                <UserIcon size={16} className="text-emerald-500" /> {age} years
+                old • {gender}
               </p>
             </div>
 
-            <div className="bg-base-200/50 p-4 rounded-2xl border border-base-300">
-              <h3 className="text-sm font-bold uppercase tracking-widest text-base-content/50 mb-2">About {firstName}</h3>
-              <p className="text-base-content/80 leading-relaxed">{about || "No bio provided yet."}</p>
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-left">
+              <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+                About {firstName}
+              </h3>
+              <p className="text-slate-600 leading-relaxed font-medium">
+                {about || "No bio provided yet."}
+              </p>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-widest text-base-content/50 mb-3">Tech Stack</h3>
+            <div className="text-left">
+              <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3">
+                Interests & Skills
+              </h3>
               <div className="flex flex-wrap gap-2">
-                {skills.map((skill, index) => (
-                  <span key={index} className="badge badge-primary badge-outline py-3 px-4 font-semibold text-xs tracking-wider">
-                    <Code2 size={12} className="mr-2" /> {skill}
+                {skillsArray.map((skill, index) => (
+                  <span
+                    key={index}
+                    className="px-4 py-2 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-full text-[11px] font-bold uppercase tracking-widest flex items-center shadow-sm"
+                  >
+                    <Tag size={12} className="mr-1.5" /> {skill.trim()}
                   </span>
                 ))}
               </div>
@@ -72,14 +103,22 @@ const PublicProfile = () => {
           </div>
         </div>
 
-        {/* Gallery Section */}
         {gallery.length > 0 && (
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">Gallery</h3>
+          <div className="mt-12 pt-10 border-t border-slate-100">
+            <h3 className="text-xl font-extrabold text-slate-800 mb-6 tracking-tight">
+              Gallery
+            </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {gallery.map((imgSrc, index) => (
-                <div key={index} className="aspect-square rounded-2xl overflow-hidden shadow-lg border border-base-200/50 hover:scale-105 transition-transform cursor-pointer">
-                  <img src={imgSrc} alt={`Gallery ${index}`} className="w-full h-full object-cover" />
+                <div
+                  key={index}
+                  className="aspect-square rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl hover:scale-[1.02] hover:border-emerald-200 transition-all cursor-pointer"
+                >
+                  <img
+                    src={imgSrc}
+                    alt={`Gallery ${index}`}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               ))}
             </div>

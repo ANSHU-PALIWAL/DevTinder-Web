@@ -7,18 +7,17 @@ import { addUser } from "../utils/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
-  Image as ImageIcon,
-  Code2,
+  Tag,
   Info,
   UserCircle,
   Save,
   CheckCircle2,
   UploadCloud,
+  X,
 } from "lucide-react";
 
 const EditProfile = ({ user }) => {
   const [gallery, setGallery] = useState(user.gallery || []);
-
   const [firstName, setFirstName] = useState(user.firstName || "");
   const [lastName, setLastName] = useState(user.lastName || "");
   const [age, setAge] = useState(user.age || "");
@@ -26,28 +25,24 @@ const EditProfile = ({ user }) => {
   const [about, setAbout] = useState(user.about || "");
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "");
   const [skills, setSkills] = useState(user.skills || "");
-
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
+
   const dispatch = useDispatch();
 
-  // --- NEW: FILE UPLOAD HANDLER ---
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // 1. Check file size (Let's restrict to 2MB to keep your database happy)
       if (file.size > 2 * 1024 * 1024) {
         setError("Image size must be less than 2MB.");
         return;
       }
 
-      // 2. Convert the image file to a Base64 string
       const reader = new FileReader();
       reader.onloadend = () => {
-        // This sets the photoUrl state to a massive string representing the image
         setPhotoUrl(reader.result);
-        setError(""); // Clear any previous errors
+        setError("");
       };
       reader.readAsDataURL(file);
     }
@@ -89,14 +84,11 @@ const EditProfile = ({ user }) => {
         { withCredentials: true },
       );
 
-      // 🚀 FIX: The backend now returns { success: true, data: user }
-      // So we access the user object via res.data.data
       dispatch(addUser(res.data.data));
 
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (err) {
-      // 🛡️ FIX: Safely extract the clean error message from our new backend JSON
       const errorMessage =
         err?.response?.data?.message || "Error updating profile";
       setError(errorMessage);
@@ -106,178 +98,141 @@ const EditProfile = ({ user }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl grid lg:grid-cols-12 gap-8 lg:gap-12 bg-base-300/40 rounded-[2.5rem] p-6 sm:p-10 shadow-2xl backdrop-blur-md border border-base-200/50 relative overflow-hidden">
-      {/* Background Glow Effects */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-primary/10 rounded-full blur-[100px]"></div>
-        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-[100px]"></div>
+    <div className="w-full max-w-6xl grid lg:grid-cols-12 gap-8 lg:gap-12 bg-white rounded-[2.5rem] p-6 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-slate-100 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-100/40 rounded-full blur-[100px]"></div>
+        <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-100/40 rounded-full blur-[100px]"></div>
       </div>
 
-      {/* LEFT COLUMN: The Form */}
-      <div className="lg:col-span-7 flex flex-col space-y-6">
+      <div className="lg:col-span-7 flex flex-col space-y-6 z-10">
         <div>
-          <h2 className="text-3xl font-extrabold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+          <h2 className="text-3xl font-extrabold mb-2 text-slate-900 tracking-tight">
             Edit Your Profile
           </h2>
-          <p className="text-base-content/60">
-            Update your details to stand out to other developers.
+          <p className="text-slate-500 font-medium">
+            Update your details so your neighbors can get to know you.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* First Name */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium text-base-content/80">
-                First Name
-              </span>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+              First Name
             </label>
             <div className="relative">
               <User
-                size={18}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
+                size={16}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"
               />
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          {/* Last Name */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium text-base-content/80">
-                Last Name
-              </span>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+              Last Name
             </label>
             <div className="relative">
               <User
-                size={18}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
+                size={16}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"
               />
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          {/* Age */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium text-base-content/80">
-                Age
-              </span>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+              Age
             </label>
             <div className="relative">
               <UserCircle
-                size={18}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
+                size={16}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"
               />
               <input
                 type="number"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
-                className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
               />
             </div>
           </div>
 
-          {/* Gender */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium text-base-content/80">
-                Gender
-              </span>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+              Gender
             </label>
             <div className="relative">
               <UserCircle
-                size={18}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
+                size={16}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"
               />
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-                className="select select-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium appearance-none cursor-pointer"
               >
-                <option
-                  value=""
-                  disabled
-                  className="bg-base-300 text-base-content"
-                >
+                <option value="" disabled>
                   Select Gender
                 </option>
-                <option value="Male" className="bg-base-300 text-base-content">
-                  Male
-                </option>
-                <option
-                  value="Female"
-                  className="bg-base-300 text-base-content"
-                >
-                  Female
-                </option>
-                <option value="Other" className="bg-base-300 text-base-content">
-                  Other
-                </option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* --- NEW: INTERACTIVE PHOTO UPLOAD --- */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-medium text-base-content/80">
-              Profile Photo
-            </span>
+        <div className="space-y-1">
+          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+            Profile Photo
           </label>
-          <div className="flex items-center gap-4 bg-base-200/50 p-3 rounded-2xl border border-base-300">
-            {/* Small Preview Avatar */}
-            <div className="avatar">
-              <div className="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 shadow-lg">
-                <img
-                  src={
-                    photoUrl ||
-                    "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
-                  }
-                  alt="Avatar Preview"
-                />
-              </div>
+          <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="w-16 h-16 rounded-full ring-4 ring-white shadow-sm overflow-hidden flex-shrink-0">
+              <img
+                src={
+                  photoUrl ||
+                  "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
+                }
+                alt="Avatar Preview"
+                className="w-full h-full object-cover"
+              />
             </div>
-            {/* DaisyUI File Input */}
             <div className="flex-1">
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="file-input file-input-bordered file-input-primary w-full shadow-sm"
+                className="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:uppercase file:tracking-widest file:font-bold file:bg-emerald-50 file:text-emerald-600 hover:file:bg-emerald-100 transition-all cursor-pointer"
               />
-              <p className="text-xs text-base-content/50 mt-2 px-1 flex items-center gap-1">
+              <p className="text-xs text-slate-400 mt-2 px-1 flex items-center gap-1 font-medium">
                 <UploadCloud size={14} /> JPEG, PNG up to 2MB
               </p>
             </div>
           </div>
         </div>
 
-        {/* --- GALLERY UPLOAD --- */}
-        <div className="form-control mt-6">
-          <label className="label">
-            <span className="label-text font-medium text-base-content/80">
-              Gallery Images ({gallery.length}/4)
-            </span>
+        <div className="space-y-1 mt-6">
+          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+            Gallery Images ({gallery.length}/4)
           </label>
-          <div className="bg-base-200/50 p-4 rounded-2xl border border-base-300">
-            {/* Display current gallery */}
-            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="flex gap-3 mb-4 overflow-x-auto pb-2">
               {gallery.map((img, idx) => (
                 <div
                   key={idx}
-                  className="relative min-w-[80px] h-20 rounded-xl overflow-hidden border border-base-300"
+                  className="relative min-w-[80px] h-20 rounded-xl overflow-hidden border border-slate-200 shadow-sm"
                 >
                   <img
                     src={img}
@@ -286,83 +241,75 @@ const EditProfile = ({ user }) => {
                   />
                   <button
                     onClick={() => removeGalleryImage(idx)}
-                    className="absolute top-1 right-1 bg-error text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                    className="absolute top-1 right-1 bg-white/90 text-rose-500 hover:bg-rose-500 hover:text-white transition-colors rounded-full w-6 h-6 flex items-center justify-center shadow-md cursor-pointer"
                   >
-                    ×
+                    <X size={14} strokeWidth={3} />
                   </button>
                 </div>
               ))}
             </div>
 
-            {/* Upload Button */}
             {gallery.length < 4 && (
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleGalleryUpload}
-                className="file-input file-input-bordered file-input-sm w-full shadow-sm"
+                className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:uppercase file:tracking-widest file:font-bold file:bg-slate-200 file:text-slate-600 hover:file:bg-slate-300 transition-all cursor-pointer"
               />
             )}
           </div>
         </div>
 
-        {/* Skills */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-medium text-base-content/80">
-              Top Skills{" "}
-              <span className="text-xs opacity-60">(Comma separated)</span>
+        <div className="space-y-1">
+          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+            Interests & Skills{" "}
+            <span className="lowercase tracking-normal font-medium">
+              (Comma separated)
             </span>
           </label>
           <div className="relative">
-            <Code2
-              size={18}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
+            <Tag
+              size={16}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"
             />
             <input
               type="text"
               value={skills}
-              placeholder="React, Node, MongoDB..."
+              placeholder="Baking, Yoga, Carpentry..."
               onChange={(e) => setSkills(e.target.value)}
-              className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
             />
           </div>
         </div>
 
-        {/* About */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text font-medium text-base-content/80">
-              About You
-            </span>
+        <div className="space-y-1">
+          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+            About You
           </label>
           <div className="relative">
-            <Info
-              size={18}
-              className="absolute left-4 top-4 text-base-content/40"
-            />
+            <Info size={16} className="absolute left-4 top-4 text-slate-400" />
             <textarea
               value={about}
-              placeholder="I love building scalable web apps..."
+              placeholder="I love helping out in the community and finding new running trails..."
               onChange={(e) => setAbout(e.target.value)}
-              className="textarea textarea-bordered w-full pl-11 min-h-[120px] focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none leading-relaxed"
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400 min-h-[120px] resize-y leading-relaxed"
             ></textarea>
           </div>
         </div>
 
         {error && (
-          <p className="text-error text-sm font-medium animate-pulse bg-error/10 p-3 rounded-lg border border-error/20">
-            {error}
+          <p className="text-xs font-semibold text-rose-500 bg-rose-50 p-3 rounded-xl border border-rose-100 flex items-center gap-2">
+            <X size={16} /> {error}
           </p>
         )}
 
         <button
-          className="btn btn-primary w-full sm:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all duration-300 border-none rounded-xl mt-4 self-end"
+          className="w-full sm:w-auto py-3 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-100 transition-all active:scale-95 flex items-center justify-center gap-2 self-end mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
           onClick={updateProfile}
           disabled={isSaving}
         >
           {isSaving ? (
-            <span className="loading loading-spinner loading-sm"></span>
+            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
           ) : (
             <Save size={18} />
           )}
@@ -370,11 +317,10 @@ const EditProfile = ({ user }) => {
         </button>
       </div>
 
-      {/* RIGHT COLUMN: Live Preview */}
-      <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-start mt-10 lg:mt-0 relative">
+      <div className="lg:col-span-5 flex flex-col items-center lg:items-end justify-start mt-10 lg:mt-0 relative z-10">
         <div className="sticky top-28 w-full max-w-sm flex flex-col items-center mx-auto">
-          <p className="text-sm font-bold uppercase tracking-widest text-base-content/40 mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-success animate-pulse"></span>{" "}
+          <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Live Preview
           </p>
 
@@ -387,7 +333,7 @@ const EditProfile = ({ user }) => {
                 age: age || "??",
                 gender: gender || "??",
                 about: about || "Write something cool about yourself...",
-                skills: skills || "React, Node",
+                skills: skills || "Baking, Yoga",
               }}
               onAction={() => {}}
               isInteractive={false}
@@ -396,19 +342,18 @@ const EditProfile = ({ user }) => {
         </div>
       </div>
 
-      {/* Animated Success Toast */}
       <AnimatePresence>
         {showToast && (
           <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-10 right-10 z-50"
+            className="fixed bottom-10 right-10 z-[100]"
           >
-            <div className="alert alert-success shadow-2xl border border-success/30 flex items-center gap-2">
-              <CheckCircle2 size={20} className="text-success-content" />
-              <span className="font-medium text-success-content">
-                Profile updated successfully!
+            <div className="bg-emerald-50 border border-emerald-200 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
+              <CheckCircle2 size={24} className="text-emerald-500" />
+              <span className="font-bold text-sm text-emerald-700 uppercase tracking-widest">
+                Profile Updated
               </span>
             </div>
           </motion.div>
