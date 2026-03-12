@@ -32,7 +32,7 @@ const NavBar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  // Premium, pill-shaped navigation links (Google Material / Apple style)
+  // Premium, pill-shaped navigation links for Desktop
   const navLinkBase =
     "flex items-center gap-2.5 px-4 py-2.5 rounded-full text-[14px] font-semibold transition-all duration-200 ease-out active:scale-95";
   const navLinkActive =
@@ -40,36 +40,32 @@ const NavBar = () => {
   const navLinkInactive =
     "text-slate-500 hover:text-slate-900 hover:bg-slate-100";
 
-  const mobileLinkBase =
-    "p-3 rounded-full transition-all duration-200 ease-out active:scale-95";
-  const mobileLinkActive =
-    "bg-emerald-50 text-emerald-700 shadow-[inset_0_0_0_1px_rgba(16,185,129,0.2)]";
-  const mobileLinkInactive =
-    "text-slate-500 hover:text-slate-900 hover:bg-slate-100";
-
   return (
     <div className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/60 shadow-sm px-4 sm:px-8 py-3 transition-all duration-300">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Slick, Interactive Logo */}
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
+          {" "}
+          {/* Added min-w-0 to prevent flex blowout */}
           <Link
             to="/"
             className="flex items-center gap-3 group w-fit cursor-pointer active:scale-95 transition-transform"
           >
-            <div className="w-10 h-10 flex items-center justify-center bg-emerald-500 rounded-[14px] shadow-md shadow-emerald-500/20 text-white group-hover:bg-emerald-600 transition-colors">
+            <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-emerald-500 rounded-[14px] shadow-md shadow-emerald-500/20 text-white group-hover:bg-emerald-600 transition-colors">
               <MapPin size={22} strokeWidth={2.5} />
             </div>
-            <span className="text-xl tracking-tight text-slate-800 hidden sm:block">
+            {/* Logo text hides entirely on very small screens, shows clearly on tablet+ */}
+            <span className="text-xl tracking-tight text-slate-800 hidden sm:block truncate">
               <span className="font-extrabold">Connect</span>
-              <span className="font-medium text-emerald-600">Neighbour</span>
+              <span className="font-medium text-emerald-600"> Neighbour</span>
             </span>
           </Link>
         </div>
 
         {user && (
-          <div className="flex gap-2 sm:gap-6 items-center">
-            {/* Main Navigation (Desktop) */}
-            <div className="hidden md:flex items-center gap-1.5 mr-4">
+          <div className="flex gap-2 lg:gap-6 items-center flex-shrink-0">
+            {/* Main Navigation (Strictly Desktop Only -> lg: 1024px and up) */}
+            <div className="hidden lg:flex items-center gap-1.5 mr-4">
               <Link
                 to="/"
                 className={`${navLinkBase} ${isActive("/") ? navLinkActive : navLinkInactive}`}
@@ -109,51 +105,14 @@ const NavBar = () => {
               </Link>
             </div>
 
-            {/* Mobile Navigation */}
-            <div className="flex md:hidden items-center gap-1 mr-2">
-              <Link
-                to="/"
-                className={`${mobileLinkBase} ${isActive("/") ? mobileLinkActive : mobileLinkInactive}`}
-              >
-                <Home size={22} strokeWidth={isActive("/") ? 2.5 : 2} />
-              </Link>
-              <Link
-                to="/radar"
-                className={`${mobileLinkBase} ${isActive("/radar") ? mobileLinkActive : mobileLinkInactive}`}
-              >
-                <Navigation
-                  size={22}
-                  strokeWidth={isActive("/radar") ? 2.5 : 2}
-                />
-              </Link>
-              <Link
-                to="/connections"
-                className={`${mobileLinkBase} ${isActive("/connections") ? mobileLinkActive : mobileLinkInactive}`}
-              >
-                <Users
-                  size={22}
-                  strokeWidth={isActive("/connections") ? 2.5 : 2}
-                />
-              </Link>
-              <Link
-                to="/requests"
-                className={`${mobileLinkBase} ${isActive("/requests") ? mobileLinkActive : mobileLinkInactive}`}
-              >
-                <UserPlus
-                  size={22}
-                  strokeWidth={isActive("/requests") ? 2.5 : 2}
-                />
-              </Link>
-            </div>
-
             {/* Clean User Profile Section */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
                 role="button"
-                className="flex items-center gap-3 hover:bg-slate-50 p-1.5 pr-4 rounded-full transition-colors active:scale-95 border border-transparent hover:border-slate-100 cursor-pointer"
+                className="flex items-center gap-3 hover:bg-slate-50 p-1.5 lg:pr-4 rounded-full transition-colors active:scale-95 border border-transparent hover:border-slate-100 cursor-pointer"
               >
-                <div className="w-9 h-9 rounded-full shadow-sm bg-slate-100 overflow-hidden ring-2 ring-white">
+                <div className="w-9 h-9 rounded-full shadow-sm bg-slate-100 overflow-hidden ring-2 ring-white flex-shrink-0">
                   <img
                     alt={user.firstName}
                     src={
@@ -163,7 +122,8 @@ const NavBar = () => {
                     className="object-cover w-full h-full"
                   />
                 </div>
-                <span className="hidden lg:block text-sm font-bold text-slate-700">
+                {/* Name only shows on large screens */}
+                <span className="hidden lg:block text-sm font-bold text-slate-700 truncate max-w-[120px]">
                   {user.firstName}
                 </span>
               </div>
@@ -173,6 +133,55 @@ const NavBar = () => {
                 tabIndex="-1"
                 className="menu menu-sm dropdown-content bg-white border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.12)] rounded-2xl z-[100] mt-3 w-56 p-2 gap-1"
               >
+                {/* --- MOBILE/TABLET ONLY NAVIGATION LINKS (Hidden on lg) --- */}
+                <li className="lg:hidden">
+                  <Link
+                    to="/"
+                    className={`flex items-center gap-3 px-4 py-3 text-[14px] font-medium rounded-xl transition-colors ${isActive("/") ? "bg-emerald-50 text-emerald-600" : "text-slate-600 hover:bg-slate-50 hover:text-emerald-600"}`}
+                  >
+                    <Home size={18} strokeWidth={isActive("/") ? 2.5 : 2} />{" "}
+                    Feed
+                  </Link>
+                </li>
+                <li className="lg:hidden">
+                  <Link
+                    to="/radar"
+                    className={`flex items-center gap-3 px-4 py-3 text-[14px] font-medium rounded-xl transition-colors ${isActive("/radar") ? "bg-emerald-50 text-emerald-600" : "text-slate-600 hover:bg-slate-50 hover:text-emerald-600"}`}
+                  >
+                    <Navigation
+                      size={18}
+                      strokeWidth={isActive("/radar") ? 2.5 : 2}
+                    />{" "}
+                    Radar
+                  </Link>
+                </li>
+                <li className="lg:hidden">
+                  <Link
+                    to="/connections"
+                    className={`flex items-center gap-3 px-4 py-3 text-[14px] font-medium rounded-xl transition-colors ${isActive("/connections") ? "bg-emerald-50 text-emerald-600" : "text-slate-600 hover:bg-slate-50 hover:text-emerald-600"}`}
+                  >
+                    <Users
+                      size={18}
+                      strokeWidth={isActive("/connections") ? 2.5 : 2}
+                    />{" "}
+                    Neighbors
+                  </Link>
+                </li>
+                <li className="lg:hidden">
+                  <Link
+                    to="/requests"
+                    className={`flex items-center gap-3 px-4 py-3 text-[14px] font-medium rounded-xl transition-colors ${isActive("/requests") ? "bg-emerald-50 text-emerald-600" : "text-slate-600 hover:bg-slate-50 hover:text-emerald-600"}`}
+                  >
+                    <UserPlus
+                      size={18}
+                      strokeWidth={isActive("/requests") ? 2.5 : 2}
+                    />{" "}
+                    Requests
+                  </Link>
+                </li>
+                <div className="lg:hidden h-[1px] bg-slate-100 w-full my-1"></div>
+                {/* --- END MOBILE/TABLET ONLY NAVIGATION --- */}
+
                 <li>
                   <Link
                     to="/profile"
