@@ -17,8 +17,8 @@ import {
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [emailId, setEmailId] = useState("Anshu@gmail.com");
-  const [password, setPassword] = useState("Anshu@123");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
