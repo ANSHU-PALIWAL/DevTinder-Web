@@ -3,22 +3,28 @@ import { Github, Twitter, Linkedin, Heart } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="w-full py-4 px-8 border-t border-base-200/50 bg-base-300/30 backdrop-blur-md flex flex-col sm:flex-row justify-between items-center text-sm text-base-content/60 transition-all z-40">
-      <p className="flex items-center gap-1 mb-2 sm:mb-0">
-        © {new Date().getFullYear()} DevTinder. Built with{" "}
-        <Heart size={14} className="text-error fill-error animate-pulse" /> for
-        developers.
-      </p>
+    <footer className="w-full py-6 px-4 sm:px-8 border-t border-slate-200/60 bg-white/80 backdrop-blur-md flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-500 transition-all z-40">
+      <div className="flex flex-col sm:flex-row items-center gap-1.5 text-center sm:text-left font-medium">
+        <span>© {new Date().getFullYear()} ConnectNeighbour.</span>
+        <span className="flex items-center gap-1.5">
+          Built with{" "}
+          <Heart
+            size={16}
+            className="text-rose-500 fill-rose-500 animate-pulse"
+          />{" "}
+          for neighborhoods.
+        </span>
+      </div>
 
-      <div className="flex gap-5">
-        <a className="hover:text-primary hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <Github size={18} />
+      <div className="flex gap-6">
+        <a className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <Github size={20} />
         </a>
-        <a className="hover:text-info hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <Twitter size={18} />
+        <a className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <Twitter size={20} />
         </a>
-        <a className="hover:text-blue-500 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
-          <Linkedin size={18} />
+        <a className="text-slate-400 hover:text-emerald-600 hover:scale-110 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <Linkedin size={20} />
         </a>
       </div>
     </footer>
