@@ -5,12 +5,18 @@ import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
-import { TerminalSquare, Mail, Lock, User as UserIcon } from "lucide-react";
+import {
+  MapPin,
+  Mail,
+  Lock,
+  User as UserIcon,
+  ShieldCheck,
+  Heart,
+  Handshake,
+} from "lucide-react";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
-
-  // Form States
   const [emailId, setEmailId] = useState("Anshu@gmail.com");
   const [password, setPassword] = useState("Anshu@123");
   const [firstName, setFirstName] = useState("");
@@ -23,121 +29,118 @@ const Login = () => {
   const handleAuth = async () => {
     setError("");
     try {
-      if (isLogin) {
-        // LOGIN API CALL
-        const res = await axios.post(
-          API_BASE_URL + "/login",
-          { emailId, password },
-          { withCredentials: true },
-        );
-        // 🚀 FIX: Axios puts the response in 'res.data'.
-        // Our backend puts the user in 'data'. So it's res.data.data!
-        dispatch(addUser(res.data.data));
-        navigate("/");
-      } else {
-        // SIGNUP API CALL
-        const res = await axios.post(
-          API_BASE_URL + "/signup",
-          { firstName, lastName, emailId, password },
-          { withCredentials: true },
-        );
-        // 🚀 FIX: Same here, extract the actual user object
-        dispatch(addUser(res.data.data));
-        navigate("/profile");
-      }
+      const endpoint = isLogin ? "/login" : "/signup";
+      const payload = isLogin
+        ? { emailId, password }
+        : { firstName, lastName, emailId, password };
+      const res = await axios.post(API_BASE_URL + endpoint, payload, {
+        withCredentials: true,
+      });
+      dispatch(addUser(res.data.data));
+      navigate(isLogin ? "/" : "/profile");
     } catch (err) {
-      // 🛡️ ERROR FIX: Extract the specific string message from our new backend JSON
-      const errorMessage =
-        err?.response?.data?.message || "Something went wrong";
-      setError(errorMessage);
+      setError(err?.response?.data?.message || "Authentication failed");
     }
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center p-4 min-h-[85vh]">
-      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-base-300/40 rounded-[2.5rem] shadow-2xl overflow-hidden border border-base-200/50 backdrop-blur-md">
-        {/* Left Side: Dynamic Terminal Mockup */}
-        <div className="hidden md:flex flex-col justify-center p-14 bg-gradient-to-br from-base-300 to-base-200 relative overflow-hidden">
-          <div className="absolute -top-32 -right-32 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
-          <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-secondary/20 rounded-full blur-[100px] pointer-events-none"></div>
+    <div className="flex-grow flex items-center justify-center p-4 bg-[#F8FAFC] min-h-[90vh] font-sans antialiased">
+      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden border border-slate-100">
+        {/* Left Side: The Premium Design you liked */}
+        <div className="hidden md:flex flex-col justify-center p-12 bg-[#F1F5F9] relative overflow-hidden">
+          {/* Those high-end blurred circles */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-200/50 rounded-full blur-[100px] -mr-32 -mt-32" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-200/50 rounded-full blur-[100px] -ml-32 -mb-32" />
 
           <div className="relative z-10">
-            <TerminalSquare size={48} className="text-primary mb-6" />
-            <h1 className="text-5xl font-extrabold mb-4 leading-tight">
-              {isLogin ? "Welcome Back." : "Join the Network."}
-            </h1>
-            <p className="text-lg opacity-70 mb-8 max-w-sm">
+            <div className="flex items-center gap-2 mb-8 text-emerald-600">
+              <MapPin size={28} strokeWidth={2.5} />
+              <span className="font-bold text-lg tracking-tight text-slate-800 uppercase">
+                ConnectNeighbour
+              </span>
+            </div>
+
+            <h1 className="text-4xl font-extrabold text-slate-900 mb-5 leading-tight">
               {isLogin
-                ? "Ready to find your next pair programming soulmate? Access your dashboard."
-                : "Create an account to start matching with top-tier developers in your area."}
+                ? "Welcome back to the street."
+                : "Your neighbors are waiting."}
+            </h1>
+
+            <p className="text-slate-600 text-base mb-10 leading-relaxed max-w-sm">
+              {isLogin
+                ? "Sign in to see who's nearby, borrow a hand, or share a coffee."
+                : "Join the most trusted hyper-local network. It's time to know who lives next door."}
             </p>
 
-            <div className="mockup-code bg-base-300 shadow-2xl border border-base-100/50 text-sm">
-              <pre data-prefix="$">
-                <code>
-                  {isLogin
-                    ? "npm run devtinder --login"
-                    : "npx create-dev-profile"}
-                </code>
-              </pre>
-              <pre data-prefix=">" className="text-warning">
-                <code>authenticating credentials...</code>
-              </pre>
-              <pre data-prefix=">" className="text-success">
-                <code>
-                  {isLogin ? "Access granted." : "Profile initialized."}
-                </code>
-              </pre>
+            {/* Feature Icons */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-4">
+                <div className="p-2.5 bg-white rounded-xl shadow-sm text-emerald-500">
+                  <ShieldCheck size={20} />
+                </div>
+                <span className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">
+                  Privacy First: No numbers shared
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="p-2.5 bg-white rounded-xl shadow-sm text-blue-500">
+                  <Handshake size={20} />
+                </div>
+                <span className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">
+                  Mutual Match Only
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="p-2.5 bg-white rounded-xl shadow-sm text-rose-500">
+                  <Heart size={20} />
+                </div>
+                <span className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">
+                  1km - 5km Local Radius
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Interactive Form */}
-        <div className="p-8 md:p-16 flex flex-col justify-center bg-base-100/60 z-10 relative">
-          <div className="mb-8 text-center md:text-left">
-            <h2 className="text-3xl font-bold mb-2">
-              {isLogin ? "Sign In" : "Sign Up"}
+        {/* Right Side: Clean Form with Minimalist Fonts */}
+        <div className="p-8 md:p-14 flex flex-col justify-center bg-white">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-slate-900 mb-1">
+              {isLogin ? "Sign In" : "Create Account"}
             </h2>
-            <p className="text-base-content/60">
-              {isLogin
-                ? "Enter your email and password to connect."
-                : "Fill in your details to get started."}
+            <p className="text-sm text-slate-500 font-medium">
+              Please enter your details to continue.
             </p>
           </div>
 
           <div className="space-y-4">
-            {/* Animated Signup Fields (First Name & Last Name) */}
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               {!isLogin && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0, y: -10 }}
-                  animate={{ height: "auto", opacity: 1, y: 0 }}
-                  exit={{ height: 0, opacity: 0, y: -10 }}
-                  className="grid grid-cols-2 gap-4 overflow-hidden"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="grid grid-cols-2 gap-3"
                 >
-                  <div className="relative">
-                    <UserIcon
-                      size={18}
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
-                    />
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                      First Name
+                    </label>
                     <input
-                      type="text"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+                      placeholder="Rahul"
                       value={firstName}
-                      placeholder="First Name"
-                      className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
                       onChange={(e) => setFirstName(e.target.value)}
                     />
                   </div>
-                  <div className="relative">
-                    <UserIcon
-                      size={18}
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
-                    />
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                      Last Name
+                    </label>
                     <input
-                      type="text"
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+                      placeholder="Sharma"
                       value={lastName}
-                      placeholder="Last Name"
-                      className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
                       onChange={(e) => setLastName(e.target.value)}
                     />
                   </div>
@@ -145,70 +148,69 @@ const Login = () => {
               )}
             </AnimatePresence>
 
-            {/* Email Input */}
-            <div className="relative">
-              <Mail
-                size={18}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
-              />
-              <input
-                type="email"
-                value={emailId}
-                placeholder="Email Address"
-                className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
-                onChange={(e) => setEmailId(e.target.value)}
-              />
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail
+                  size={16}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  type="email"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+                  placeholder="name@email.com"
+                  value={emailId}
+                  onChange={(e) => setEmailId(e.target.value)}
+                />
+              </div>
             </div>
 
-            {/* Password Input */}
-            <div className="relative">
-              <Lock
-                size={18}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base-content/40"
-              />
-              <input
-                type="password"
-                value={password}
-                placeholder="Password"
-                className="input input-bordered w-full pl-11 focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-base-200/50 outline-none"
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+                Password
+              </label>
+              <div className="relative">
+                <Lock
+                  size={16}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  type="password"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
             </div>
 
-            {/* Error Message */}
-            <AnimatePresence>
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="text-error text-sm font-medium px-1 bg-error/10 p-2 rounded-lg border border-error/20"
-                >
-                  {error}
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {error && (
+              <p className="text-xs font-semibold text-rose-500 bg-rose-50 p-3 rounded-lg border border-rose-100">
+                {error}
+              </p>
+            )}
 
-            {/* Submit Button */}
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              className="btn btn-primary w-full mt-4 shadow-lg shadow-primary/20 hover:shadow-primary/40 border-none rounded-xl"
+            <button
               onClick={handleAuth}
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-100 transition-all transform hover:-translate-y-0.5 active:scale-95 cursor-pointer"
             >
-              {isLogin ? "Login to Dashboard" : "Create Account"}
-            </motion.button>
+              {isLogin ? "Sign In" : "Create Account"}
+            </button>
 
-            {/* Toggle State */}
-            <div className="text-center mt-6 text-sm text-base-content/70">
-              {isLogin ? "Don't have an account?" : "Already have an account?"}
+            <div className="pt-6 text-center">
+              <span className="text-slate-400 text-xs font-medium">
+                {isLogin ? "New to the neighborhood?" : "Already a member?"}
+              </span>
               <button
                 onClick={() => {
                   setIsLogin(!isLogin);
-                  setError(""); // clear errors on swap
+                  setError("");
                 }}
-                className="ml-2 text-primary font-bold hover:underline"
+                className="ml-2 text-emerald-600 font-bold hover:underline cursor-pointer text-xs uppercase tracking-wider"
               >
-                {isLogin ? "Sign up" : "Log in"}
+                {isLogin ? "Join Now" : "Log In"}
               </button>
             </div>
           </div>
