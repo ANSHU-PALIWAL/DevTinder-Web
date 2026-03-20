@@ -32,7 +32,6 @@ const NavBar = () => {
 
   const isActive = (path) => location.pathname === path;
 
-  // Premium, pill-shaped navigation links for Desktop
   const navLinkBase =
     "flex items-center gap-2.5 px-4 py-2.5 rounded-full text-[14px] font-semibold transition-all duration-200 ease-out active:scale-95";
   const navLinkActive =
@@ -43,10 +42,7 @@ const NavBar = () => {
   return (
     <div className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/60 shadow-sm px-4 sm:px-8 py-3 transition-all duration-300">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Slick, Interactive Logo */}
         <div className="flex-1 min-w-0">
-          {" "}
-          {/* Added min-w-0 to prevent flex blowout */}
           <Link
             to="/"
             className="flex items-center gap-3 group w-fit cursor-pointer active:scale-95 transition-transform"
@@ -54,7 +50,6 @@ const NavBar = () => {
             <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-emerald-500 rounded-[14px] shadow-md shadow-emerald-500/20 text-white group-hover:bg-emerald-600 transition-colors">
               <MapPin size={22} strokeWidth={2.5} />
             </div>
-            {/* Logo text hides entirely on very small screens, shows clearly on tablet+ */}
             <span className="text-xl tracking-tight text-slate-800 hidden sm:block truncate">
               <span className="font-extrabold">Connect</span>
               <span className="font-medium text-emerald-600"> Neighbour</span>
@@ -64,7 +59,6 @@ const NavBar = () => {
 
         {user && (
           <div className="flex gap-2 lg:gap-6 items-center flex-shrink-0">
-            {/* Main Navigation (Strictly Desktop Only -> lg: 1024px and up) */}
             <div className="hidden lg:flex items-center gap-1.5 mr-4">
               <Link
                 to="/"
@@ -105,7 +99,6 @@ const NavBar = () => {
               </Link>
             </div>
 
-            {/* Clean User Profile Section */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -119,21 +112,19 @@ const NavBar = () => {
                       user.photoUrl ||
                       "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
                     }
+                    referrerPolicy="no-referrer"
                     className="object-cover w-full h-full"
                   />
                 </div>
-                {/* Name only shows on large screens */}
                 <span className="hidden lg:block text-sm font-bold text-slate-700 truncate max-w-[120px]">
                   {user.firstName}
                 </span>
               </div>
 
-              {/* Premium Dropdown Menu */}
               <ul
                 tabIndex="-1"
                 className="menu menu-sm dropdown-content bg-white border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.12)] rounded-2xl z-[100] mt-3 w-56 p-2 gap-1"
               >
-                {/* --- MOBILE/TABLET ONLY NAVIGATION LINKS (Hidden on lg) --- */}
                 <li className="lg:hidden">
                   <Link
                     to="/"
@@ -180,7 +171,6 @@ const NavBar = () => {
                   </Link>
                 </li>
                 <div className="lg:hidden h-[1px] bg-slate-100 w-full my-1"></div>
-                {/* --- END MOBILE/TABLET ONLY NAVIGATION --- */}
 
                 <li>
                   <Link

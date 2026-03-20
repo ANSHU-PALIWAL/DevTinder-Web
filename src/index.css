@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+.nsm7Bb-HzV7m-LgbsSe {
+    border: none !important;
+    outline: none !important;
+}
+
 * {
     scrollbar-width: thin;
     scrollbar-color: #10b981 #f1f5f9;
