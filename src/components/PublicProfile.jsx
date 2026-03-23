@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, User as UserIcon, MessageSquare, Tag } from "lucide-react";
+import { ArrowLeft, User as UserIcon, MessageSquare, Tag, Phone, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const PublicProfile = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,6 +34,7 @@ const PublicProfile = () => {
     skills,
     age,
     gender,
+    mobileNumber,
     gallery = [],
   } = user;
   const displayImage =
@@ -74,6 +77,11 @@ const PublicProfile = () => {
                 <UserIcon size={16} className="text-emerald-500" /> {age} years
                 old • {gender}
               </p>
+              {mobileNumber && (
+                <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm border border-emerald-100 shadow-sm mx-auto md:mx-0">
+                  <Phone size={16} /> {mobileNumber}
+                </div>
+              )}
             </div>
 
             <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-left">
@@ -112,7 +120,8 @@ const PublicProfile = () => {
               {gallery.map((imgSrc, index) => (
                 <div
                   key={index}
-                  className="aspect-square rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl hover:scale-[1.02] hover:border-emerald-200 transition-all cursor-pointer"
+                  onClick={() => setSelectedImage(imgSrc)}
+                  className="aspect-square rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-xl hover:scale-[1.02] hover:border-emerald-200 transition-all cursor-zoom-in"
                 >
                   <img
                     src={imgSrc}
@@ -125,6 +134,35 @@ const PublicProfile = () => {
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-100 flex items-center justify-center bg-slate-900/90 backdrop-blur-sm p-4 cursor-zoom-out"
+            onClick={() => setSelectedImage(null)}
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors shadow-2xl z-101"
+            >
+              <X size={24} strokeWidth={2.5} />
+            </button>
+            <motion.img
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              src={selectedImage}
+              alt="Zoomed Gallery"
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

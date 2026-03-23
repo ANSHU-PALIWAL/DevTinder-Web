@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   UploadCloud,
   X,
+  Phone,
 } from "lucide-react";
 
 const EditProfile = ({ user }) => {
@@ -25,6 +26,7 @@ const EditProfile = ({ user }) => {
   const [about, setAbout] = useState(user.about || "");
   const [photoUrl, setPhotoUrl] = useState(user.photoUrl || "");
   const [skills, setSkills] = useState(user.skills || "");
+  const [mobileNumber, setMobileNumber] = useState(user.mobileNumber || "");
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -52,8 +54,8 @@ const EditProfile = ({ user }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (gallery.length >= 4) {
-      setError("You can only upload a maximum of 4 images to your gallery.");
+    if (gallery.length >= 6) {
+      setError("You can only upload a maximum of 6 images to your gallery.");
       return;
     }
 
@@ -80,7 +82,7 @@ const EditProfile = ({ user }) => {
     try {
       const res = await axios.patch(
         API_BASE_URL + "/profile/edit",
-        { firstName, lastName, about, age, gender, photoUrl, skills, gallery },
+        { firstName, lastName, about, age, gender, photoUrl, skills, gallery, mobileNumber },
         { withCredentials: true },
       );
 
@@ -196,6 +198,25 @@ const EditProfile = ({ user }) => {
 
         <div className="space-y-1">
           <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+            Mobile Number <span className="lowercase tracking-normal font-medium">(Optional - Only visible to connections)</span>
+          </label>
+          <div className="relative">
+            <Phone
+              size={16}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"
+            />
+            <input
+              type="tel"
+              value={mobileNumber}
+              placeholder="+1 234 567 8900"
+              onChange={(e) => setMobileNumber(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
             Profile Photo
           </label>
           <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
@@ -225,7 +246,7 @@ const EditProfile = ({ user }) => {
 
         <div className="space-y-1 mt-6">
           <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
-            Gallery Images ({gallery.length}/4)
+            Gallery Images ({gallery.length}/6)
           </label>
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200">
             <div className="flex gap-3 mb-4 overflow-x-auto pb-2">
@@ -249,7 +270,7 @@ const EditProfile = ({ user }) => {
               ))}
             </div>
 
-            {gallery.length < 4 && (
+            {gallery.length < 6 && (
               <input
                 type="file"
                 accept="image/*"

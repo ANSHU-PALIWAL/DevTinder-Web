@@ -69,10 +69,10 @@ const RadarView = () => {
   }
 
   const RINGS = [
-    { maxDist: 2000, radius: 130, label: "0 - 2km" },
-    { maxDist: 5000, radius: 180, label: "2 - 5km" },
-    { maxDist: 10000, radius: 230, label: "5 - 10km" },
-    { maxDist: Infinity, radius: 280, label: "10km+" },
+    { maxDist: 10000, radius: 130, label: "0 - 10km" },
+    { maxDist: 25000, radius: 180, label: "10 - 25km" },
+    { maxDist: 50000, radius: 230, label: "25 - 50km" },
+    { maxDist: 100000, radius: 280, label: "50 - 100km" },
   ];
 
   const ringGroups = [[], [], [], []];

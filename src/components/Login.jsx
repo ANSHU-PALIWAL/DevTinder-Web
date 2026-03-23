@@ -109,7 +109,7 @@ const Login = () => {
                     <Heart size={20} />
                   </div>
                   <span className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">
-                    1km - 5km Local Radius
+                    1km - 100km Local Radius
                   </span>
                 </div>
               </div>

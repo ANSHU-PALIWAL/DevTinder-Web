@@ -148,40 +148,45 @@ const Body = () => {
       <AnimatePresence>
         {showInstallPopup && (
           <motion.div
-            initial={{ y: 150, opacity: 0, x: "-50%" }}
-            animate={{ y: 0, opacity: 1, x: "-50%" }}
-            exit={{ y: 150, opacity: 0, x: "-50%" }}
-            transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-            className="fixed bottom-6 left-1/2 z-[100] w-[90%] max-w-sm bg-white/95 backdrop-blur-md border border-slate-200/60 shadow-[0_20px_60px_rgba(0,0,0,0.15)] rounded-2xl p-4 flex flex-col gap-4"
+            initial={{ opacity: 0, x: -50, y: 20, rotate: -2 }}
+            animate={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
+            exit={{ opacity: 0, x: -50, y: 20, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="fixed bottom-4 left-4 right-4 md:left-8 md:right-auto md:bottom-8 z-100 md:w-[400px] bg-white/95 backdrop-blur-xl border border-white/40 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.2)] rounded-[2rem] p-6 overflow-hidden group"
           >
+            {/* Decorative Glow */}
+            <div className="absolute -top-16 -left-16 w-40 h-40 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none transition-transform duration-1000 group-hover:scale-150"></div>
+            
             <button
               onClick={handleDismissForNow}
-              className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1 rounded-full transition-colors"
+              className="absolute top-5 right-5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 p-2 rounded-full transition-all z-20 cursor-pointer"
             >
-              <X size={16} />
+              <X size={18} strokeWidth={2.5} />
             </button>
 
-            <div className="flex items-start gap-3 pt-1">
-              <div className="bg-emerald-100/80 p-2.5 rounded-xl text-emerald-600 shrink-0 shadow-sm border border-emerald-200/50">
-                <Smartphone size={22} strokeWidth={2.5} />
+            <div className="flex gap-5 items-start relative z-10">
+              <div className="bg-linear-to-br from-emerald-400 to-emerald-600 p-4 rounded-2xl text-white shadow-xl shadow-emerald-500/30 shrink-0 relative overflow-hidden group-hover:shadow-emerald-500/50 transition-shadow duration-500">
+                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                <Smartphone size={28} strokeWidth={2} className="relative z-10" />
               </div>
-              <div>
-                <h4 className="font-extrabold text-slate-800 text-[15px] tracking-tight">
-                  Add to Home Screen
+              
+              <div className="flex-1 pr-6">
+                <h4 className="font-extrabold text-slate-800 text-lg tracking-tight leading-tight mb-1">
+                  Install App
                 </h4>
-                <p className="text-[13px] text-slate-500 mt-1 leading-relaxed font-medium pr-4">
-                  For the best native experience, add ConnectNeighbour directly
-                  to your device.
+                <p className="text-[13px] text-slate-500 leading-relaxed font-medium mb-5">
+                  Get ConnectNeighbour on your home screen for blazing fast native performance.
                 </p>
+                
+                <button
+                  onClick={handleInstallClick}
+                  className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white text-[12px] font-extrabold uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
+                >
+                  <Smartphone size={16} />
+                  Add to Home Screen
+                </button>
               </div>
             </div>
-
-            <button
-              onClick={handleInstallClick}
-              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-[13px] font-bold uppercase tracking-wider rounded-xl transition-all shadow-md shadow-emerald-500/20 active:scale-95"
-            >
-              Install App
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
