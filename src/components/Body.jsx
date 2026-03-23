@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
+import PublicNavBar from "./PublicNavBar";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Footer from "./Footer";
 import axios from "axios";
@@ -134,15 +135,15 @@ const Body = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative overflow-x-hidden">
-      {!isLoginPage && <NavBar />}
+      {userData ? <NavBar /> : <PublicNavBar />}
 
       <main
-        className={`flex-grow flex flex-col ${!isLoginPage ? "pt-20 pb-8 px-4 sm:px-6 lg:px-8" : ""}`}
+        className={`flex-grow flex flex-col ${userData && !isLoginPage ? "pt-20 pb-8 px-4 sm:px-6 lg:px-8" : ""}`}
       >
         <Outlet />
       </main>
 
-      {!isLoginPage && <Footer />}
+      {userData && <Footer />}
 
       <AnimatePresence>
         {showInstallPopup && (

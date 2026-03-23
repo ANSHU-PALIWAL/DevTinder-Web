@@ -12,6 +12,7 @@ import RadarView from "./components/RadarView";
 import Connections from "./components/Connections";
 import ProfileView from "./components/ProfileView";
 import PublicProfile from "./components/PublicProfile";
+import AboutUs from "./components/AboutUs";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="/profile/edit" element={<Profile />} />
               <Route path="/connections" element={<Connections />} />
               <Route path="/match/profile" element={<PublicProfile />} />
+              <Route path="/about" element={<AboutUs />} />
 
               {/* Catch-All Route: Must be the very last route! */}
               <Route path="*" element={<NotFound />} />
