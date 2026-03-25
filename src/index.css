@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+.google-btn-wrapper iframe,
+.google-btn-wrapper > div,
 .nsm7Bb-HzV7m-LgbsSe {
     border: none !important;
     outline: none !important;

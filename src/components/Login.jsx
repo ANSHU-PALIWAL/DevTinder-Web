@@ -61,7 +61,7 @@ const Login = () => {
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <div className="flex-grow flex items-center justify-center p-4 bg-[#F8FAFC] min-h-[90vh] font-sans antialiased">
+      <div className="grow flex items-center justify-center p-4 bg-[#F8FAFC] min-h-[90vh] font-sans antialiased">
         <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden border border-slate-100">
           <div className="hidden md:flex flex-col justify-center p-12 bg-[#F1F5F9] relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-200/50 rounded-full blur-[100px] -mr-32 -mt-32" />
@@ -127,7 +127,8 @@ const Login = () => {
             </div>
 
             <div className="space-y-4">
-              <div className="flex justify-center w-full bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 p-1">
+              <div className="google-btn-wrapper flex justify-center w-full bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 p-1">
+                {/* nsm7Bb-HzV7m-LgbsSe - keeps class from being purged by Tailwind */}
                 <GoogleLogin
                   onSuccess={handleGoogleAuth}
                   onError={() =>
@@ -143,11 +144,11 @@ const Login = () => {
               </div>
 
               <div className="flex items-center py-2">
-                <div className="flex-grow border-t border-slate-200"></div>
-                <span className="flex-shrink-0 mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                <div className="grow border-t border-slate-200"></div>
+                <span className="shrink-0 mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
                   Or continue with email
                 </span>
-                <div className="flex-grow border-t border-slate-200"></div>
+                <div className="grow border-t border-slate-200"></div>
               </div>
 
               <AnimatePresence mode="wait">
