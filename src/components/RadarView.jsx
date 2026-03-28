@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import Map, { Marker } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -19,26 +20,60 @@ const RadarView = () => {
   const userLng = loggedInUser?.location?.coordinates?.[0] || 77.209;
   const userLat = loggedInUser?.location?.coordinates?.[1] || 28.6139;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const fetchRadarFeed = async () => {
-      try {
-        const res = await axios.get(
-          API_BASE_URL + "/feed/radar?distance=100000",
-          { withCredentials: true },
+    const fetchAccurateLocationAndFeed = () => {
+      setLoading(true);
+
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+
+            try {
+              // 1. Force update the precise location in the backend
+              const locRes = await axios.patch(
+                API_BASE_URL + "/profile/location",
+                { lat: latitude, lng: longitude },
+                { withCredentials: true },
+              );
+
+              if (locRes.data?.data) {
+                dispatch(addUser(locRes.data.data)); // Sync exact coords to Redux
+              }
+
+              // 2. Fetch radar feed
+              const res = await axios.get(
+                API_BASE_URL + "/feed/radar?distance=100000",
+                { withCredentials: true },
+              );
+              setNearbyUsers(res.data.data);
+            } catch (err) {
+              setError(
+                err.response?.data?.message ||
+                  "Could not load radar data. Please try again.",
+              );
+            } finally {
+              setLoading(false);
+            }
+          },
+          (err) => {
+            setError(
+              "Location access denied. Please enable high accuracy location services to use Radar.",
+            );
+            setLoading(false);
+          },
+          { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
         );
-        setNearbyUsers(res.data.data);
-      } catch (err) {
-        setError(
-          err.response?.data?.message ||
-            "Could not load radar data. Please enable location services.",
-        );
-      } finally {
+      } else {
+        setError("Geolocation is not supported by your browser.");
         setLoading(false);
       }
     };
 
-    fetchRadarFeed();
-  }, []);
+    fetchAccurateLocationAndFeed();
+  }, [dispatch]);
 
   const handleAction = async (status, userId) => {
     try {

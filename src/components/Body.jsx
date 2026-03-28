@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import NavBar from "./NavBar";
 import PublicNavBar from "./PublicNavBar";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
@@ -18,6 +18,7 @@ const Body = () => {
 
   const [showInstallPopup, setShowInstallPopup] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const locationUpdatedRef = useRef(false);
 
   const fetchUser = async () => {
     if (userData) return;
@@ -43,22 +44,25 @@ const Body = () => {
         async (position) => {
           const { latitude, longitude } = position.coords;
           try {
-            await axios.patch(
-              API_BASE_URL + "/profile/location",
-              { lat: latitude, lng: longitude },
-              { withCredentials: true },
-            );
-          } catch (error) {
-            console.error(error);
-          }
-        },
-        (error) => {
-          console.warn(error.message);
-        },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 },
-      );
-    }
-  };
+              const res = await axios.patch(
+                API_BASE_URL + "/profile/location",
+                { lat: latitude, lng: longitude },
+                { withCredentials: true },
+              );
+              if (res.data?.data) {
+                dispatch(addUser(res.data.data));
+              }
+            } catch (error) {
+              console.error(error);
+            }
+          },
+          (error) => {
+            console.warn(error.message);
+          },
+          { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
+        );
+      }
+    };
 
   useEffect(() => {
     fetchUser();
@@ -71,7 +75,8 @@ const Body = () => {
       navigate("/");
     }
 
-    if (userData) {
+    if (userData && !locationUpdatedRef.current) {
+      locationUpdatedRef.current = true;
       updateLocation();
     }
   }, [userData, location.pathname, navigate]);
