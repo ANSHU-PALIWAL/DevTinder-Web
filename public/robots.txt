@@ -1,0 +1,22 @@
+# ConnectNeighbour — Search Engine Directives
+# https://connectneighbour.in/robots.txt
+
+# Allow all major crawlers full access
+User-agent: *
+Allow: /
+
+# Allow Googlebot specifically (redundant but explicit)
+User-agent: Googlebot
+Allow: /
+
+# Disallow authenticated/app-only routes
+Disallow: /profile
+Disallow: /profile/edit
+Disallow: /settings
+Disallow: /requests
+Disallow: /connections
+Disallow: /radar
+Disallow: /match/
+
+# Sitemap location
+Sitemap: https://connectneighbour.in/sitemap.xml

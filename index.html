@@ -4,32 +4,118 @@
 <head>
   <meta charset="UTF-8" />
 
+  <!-- ─── Favicon & PWA ─── -->
   <link rel="icon" type="image/png" href="./public/favicon.png" />
   <link rel="apple-touch-icon" href="./public/favicon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#10b981" />
 
+  <!-- ─── Viewport ─── -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>ConnectNeighbour | Your Neighborhood Social Network</title>
+  <!-- ─── Primary SEO ─── -->
+  <title>ConnectNeighbour — Hyper-Local Social Network for Your Neighborhood</title>
+  <meta name="title" content="ConnectNeighbour — Hyper-Local Social Network for Your Neighborhood" />
+  <meta name="description" content="Discover, match, and connect with verified neighbors within 100km. Share skills, borrow tools, make real friends — all without sharing your phone number. India's privacy-first neighborhood app." />
+  <meta name="keywords" content="hyperlocal social network, neighbor app india, connect with neighbors, neighborhood community app, local social networking, neighbor matching app, community building india" />
+  <meta name="author" content="Priyanshu Paliwal" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://connectneighbour.in/" />
 
-  <meta name="title" content="ConnectNeighbour | Your Neighborhood Social Network">
-  <meta name="description"
-    content="Match and connect with neighbors within 1-5km. Borrow tools, find gym partners, or share local news safely without sharing your phone number.">
+  <!-- ─── Open Graph ─── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://connectneighbour.in/" />
+  <meta property="og:site_name" content="ConnectNeighbour" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:title" content="ConnectNeighbour — Meet Your Neighbors Safely" />
+  <meta property="og:description" content="Smart, privacy-first local networking. Match with neighbors, share skills, and build the community your street deserves." />
+  <meta property="og:image" content="https://connectneighbour.in/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="ConnectNeighbour — Hyper-Local Social Network" />
 
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://connectneighbour.in/">
-  <meta property="og:title" content="ConnectNeighbour - Connect with people next door">
-  <meta property="og:description"
-    content="Stop being strangers. Use the safe 'Match' system to connect with verified neighbors nearby.">
-  <meta property="og:image" content="https://connectneighbour.in/og-image.jpg">
+  <!-- ─── Twitter Card ─── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@ConnectNeighbour" />
+  <meta name="twitter:creator" content="@priyanshu_dev" />
+  <meta name="twitter:url" content="https://connectneighbour.in/" />
+  <meta name="twitter:title" content="ConnectNeighbour — Meet Your Neighbors Safely" />
+  <meta name="twitter:description" content="Hyper-local matching for better communities. Privacy-first. Mutual match only. 100km radius." />
+  <meta name="twitter:image" content="https://connectneighbour.in/og-image.jpg" />
 
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content="https://connectneighbour.in/">
-  <meta property="twitter:title" content="ConnectNeighbour">
-  <meta property="twitter:description" content="Hyper-local matching for better communities.">
+  <!-- ─── Preconnect Performance Hints ─── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="dns-prefetch" href="https://api.connectneighbour.in" />
+
+  <!-- ─── Structured Data: WebSite ─── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ConnectNeighbour",
+    "url": "https://connectneighbour.in",
+    "description": "India's hyper-local, privacy-first neighborhood social network",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://connectneighbour.in/blogs?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- ─── Structured Data: Organization ─── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ConnectNeighbour",
+    "url": "https://connectneighbour.in",
+    "logo": "https://connectneighbour.in/public/favicon.png",
+    "description": "Hyper-local social network helping neighbors connect safely within a 100km radius.",
+    "foundingDate": "2024",
+    "founder": {
+      "@type": "Person",
+      "name": "Priyanshu Paliwal",
+      "url": "https://www.linkedin.com/in/priyanshu-paliwal-017a6a262/"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "hello@connectneighbour.in",
+      "availableLanguage": ["English", "Hindi"]
+    },
+    "sameAs": [
+      "https://github.com/ANSHU-PALIWAL",
+      "https://www.linkedin.com/in/priyanshu-paliwal-017a6a262/"
+    ]
+  }
+  </script>
+
+  <!-- ─── Structured Data: SoftwareApplication ─── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ConnectNeighbour",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "Web, iOS, Android (PWA)",
+    "description": "Discover and match with verified neighbors within 100km. Privacy-first mutual matching.",
+    "url": "https://connectneighbour.in",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    }
+  }
+  </script>
 </head>
 
-<body
-  className="bg-slate-50 min-h-screen text-slate-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
+<body class="bg-slate-50 min-h-screen text-slate-900 antialiased selection:bg-emerald-200 selection:text-emerald-900">
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>

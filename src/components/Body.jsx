@@ -10,6 +10,16 @@ import { addUser } from "../utils/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import { Smartphone, X } from "lucide-react";
 
+// Routes accessible without authentication
+const PUBLIC_ROUTES = ["/login", "/home", "/about", "/blogs", "/contact"];
+
+const isPublicRoute = (pathname) => {
+  if (PUBLIC_ROUTES.includes(pathname)) return true;
+  // match /blogs/:slug
+  if (pathname.startsWith("/blogs/")) return true;
+  return false;
+};
+
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,7 +41,11 @@ const Body = () => {
       const isUnauthorized = error.response?.status === 401;
       const isServerDown = !error.response;
 
-      if ((isUnauthorized || isServerDown) && location.pathname !== "/login") {
+      // Only redirect to /login for protected routes — public pages stay accessible
+      if (
+        (isUnauthorized || isServerDown) &&
+        !isPublicRoute(location.pathname)
+      ) {
         navigate("/login");
       }
       console.error(error.message);
@@ -71,6 +85,12 @@ const Body = () => {
   const isLoginPage = location.pathname === "/login";
 
   useEffect(() => {
+    // Logged-out user hits the root — send to public home page
+    if (!userData && location.pathname === "/") {
+      navigate("/home");
+    }
+
+    // Logged-in user on login page — send to feed
     if (userData && isLoginPage) {
       navigate("/");
     }
