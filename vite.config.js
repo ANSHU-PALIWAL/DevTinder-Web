@@ -10,15 +10,6 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
-              return "vendor-react";
-            }
-            if (id.includes("framer-motion")) {
-              return "vendor-framer";
-            }
-            if (id.includes("mapbox-gl") || id.includes("maplibre-gl") || id.includes("react-map-gl")) {
-              return "vendor-map";
-            }
             return "vendor";
           }
         },
@@ -35,7 +26,7 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-      includeAssets: ["favicon.png", "Logo500.png"],
+      includeAssets: ["favicon.png", "Logo500.png", "robots.txt", "sitemap.xml"],
       manifest: {
         name: "ConnectNeighbour",
         short_name: "Connect",
