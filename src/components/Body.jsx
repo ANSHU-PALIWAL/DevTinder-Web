@@ -11,7 +11,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Smartphone, X } from "lucide-react";
 
 // Routes accessible without authentication
-const PUBLIC_ROUTES = ["/login", "/home", "/about", "/blogs", "/contact"];
+// NOTE: "/" is included because unauthenticated users at root get redirected
+// to /home by useEffect. Without this, a stale closure in fetchUser's catch
+// block sees pathname="/" and fires navigate("/login") before the /home
+// redirect can complete — causing the production redirect loop.
+const PUBLIC_ROUTES = ["/login", "/home", "/about", "/blogs", "/contact", "/"];
 
 const isPublicRoute = (pathname) => {
   if (PUBLIC_ROUTES.includes(pathname)) return true;
@@ -30,6 +34,12 @@ const Body = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const locationUpdatedRef = useRef(false);
 
+  // Always tracks the CURRENT pathname — prevents stale closures in async callbacks
+  const locationRef = useRef(location.pathname);
+  useEffect(() => {
+    locationRef.current = location.pathname;
+  }, [location.pathname]);
+
   const fetchUser = async () => {
     if (userData) return;
     try {
@@ -41,10 +51,11 @@ const Body = () => {
       const isUnauthorized = error.response?.status === 401;
       const isServerDown = !error.response;
 
-      // Only redirect to /login for protected routes — public pages stay accessible
+      // Use locationRef.current (not the stale closure `location`) so we always
+      // read the pathname at the moment the 401 arrives, not at mount time.
       if (
         (isUnauthorized || isServerDown) &&
-        !isPublicRoute(location.pathname)
+        !isPublicRoute(locationRef.current)
       ) {
         navigate("/login");
       }
