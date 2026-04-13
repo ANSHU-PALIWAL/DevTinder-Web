@@ -4,11 +4,33 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  build: {
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router-dom")) {
+              return "vendor-react";
+            }
+            if (id.includes("framer-motion")) {
+              return "vendor-framer";
+            }
+            if (id.includes("mapbox-gl") || id.includes("maplibre-gl") || id.includes("react-map-gl")) {
+              return "vendor-map";
+            }
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      injectRegister: "script-defer",
       // 🚀 ADD THIS BLOCK TO ENABLE TESTING IN DEV MODE
       devOptions: {
         enabled: true,

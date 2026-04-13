@@ -43,6 +43,9 @@ const BlogsPage = () => {
         <meta property="og:title" content="ConnectNeighbour Blog — Local Living Stories & Tips" />
         <meta property="og:description" content="Hyper-local insights, community building tips, and real neighbor stories." />
         <meta property="og:url" content="https://connectneighbour.in/blogs" />
+        {featured?.coverImage && (
+          <link rel="preload" as="image" href={featured.coverImage} />
+        )}
       </Helmet>
 
       <div className="min-h-screen bg-[#F8FAFC]">
@@ -90,6 +93,7 @@ const BlogsPage = () => {
                 <img
                   src={featured.coverImage}
                   alt={featured.title}
+                  fetchpriority="high"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -138,6 +142,7 @@ const BlogsPage = () => {
                     <img
                       src={post.coverImage}
                       alt={post.title}
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute top-4 left-4">

@@ -5,6 +5,7 @@ import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import {
   MapPin,
@@ -60,8 +61,14 @@ const Login = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <div className="grow flex items-center justify-center p-4 bg-[#F8FAFC] min-h-[90vh] font-sans antialiased">
+    <>
+      <Helmet>
+        <title>Sign In or Join — ConnectNeighbour</title>
+        <meta name="description" content="Sign in or join ConnectNeighbour to meet verified neighbors safely. Privacy-first, mutual match only, 100km local radius." />
+        <link rel="canonical" href="https://connectneighbour.in/login" />
+      </Helmet>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <div className="grow flex items-center justify-center p-4 bg-[#F8FAFC] min-h-[90vh] font-sans antialiased">
         <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.08)] overflow-hidden border border-slate-100">
           <div className="hidden md:flex flex-col justify-center p-12 bg-[#F1F5F9] relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-200/50 rounded-full blur-[100px] -mr-32 -mt-32" />
@@ -246,7 +253,7 @@ const Login = () => {
                     setIsLogin(!isLogin);
                     setError("");
                   }}
-                  className="ml-2 text-emerald-600 font-bold hover:underline cursor-pointer text-xs uppercase tracking-wider"
+                  className="ml-2 text-emerald-700 font-bold hover:underline cursor-pointer text-xs uppercase tracking-wider"
                 >
                   {isLogin ? "Join Now" : "Log In"}
                 </button>
@@ -254,8 +261,9 @@ const Login = () => {
             </div>
           </div>
         </div>
-      </div>
-    </GoogleOAuthProvider>
+        </div>
+      </GoogleOAuthProvider>
+    </>
   );
 };
 

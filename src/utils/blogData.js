@@ -14,7 +14,7 @@ export const BLOG_POSTS = [
     author: "Priyanshu Paliwal",
     authorRole: "Founder, ConnectNeighbour",
     coverImage:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&fm=webp&fit=crop&q=70",
     content: `
 ## The Problem Nobody Talks About
 
@@ -61,7 +61,7 @@ The only weird move now is *not* knowing who's next door.
     author: "Priyanshu Paliwal",
     authorRole: "Founder, ConnectNeighbour",
     coverImage:
-      "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1200&fm=webp&fit=crop&q=70",
     content: `
 ## From Global to Hyper-Local
 
@@ -118,7 +118,7 @@ Cities that have active hyper-local networks report:
     author: "Priyanshu Paliwal",
     authorRole: "Founder, ConnectNeighbour",
     coverImage:
-      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=1200&fm=webp&fit=crop&q=70",
     content: `
 ## Your Phone Number Is More Powerful Than You Think
 
@@ -175,7 +175,7 @@ Privacy-first isn't paranoid. It's just modern.
     author: "Priyanshu Paliwal",
     authorRole: "Founder, ConnectNeighbour",
     coverImage:
-      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&fm=webp&fit=crop&q=70",
     content: `
 ## The Power of Local Discovery
 
@@ -216,7 +216,7 @@ These aren't viral moments. They're just **what a neighborhood should feel like*
     author: "Priyanshu Paliwal",
     authorRole: "Founder, ConnectNeighbour",
     coverImage:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&fm=webp&fit=crop&q=70",
     content: `
 ## The Hidden Economy Next Door
 
@@ -268,7 +268,7 @@ The formal economy will always be there. The informal one requires a bit of trus
     author: "Priyanshu Paliwal",
     authorRole: "Founder, ConnectNeighbour",
     coverImage:
-      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1200&fm=webp&fit=crop&q=70",
     content: `
 ## The Scale Fallacy
 

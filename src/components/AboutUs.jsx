@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import {
   Shield,
@@ -48,7 +49,16 @@ const FeatureCard = ({ icon: Icon, title, description }) => (
 
 const AboutUs = () => {
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-[#F8FAFC] flex flex-col pt-20 sm:pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden relative">
+    <>
+      <Helmet>
+        <title>About Us — The Future of Local Living | ConnectNeighbour</title>
+        <meta
+          name="description"
+          content="ConnectNeighbour is the digital bridge to your physical community. Discover our mission to build safe, mutual, and privacy-first local neighborhoods."
+        />
+        <link rel="canonical" href="https://connectneighbour.in/about" />
+      </Helmet>
+      <div className="min-h-[calc(100vh-80px)] bg-[#F8FAFC] flex flex-col pt-20 sm:pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden relative">
       {/* Background blobs */}
       <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }} transition={{ duration: 20, repeat: Infinity }} className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-emerald-200/20 rounded-full blur-[120px] pointer-events-none" />
       <motion.div animate={{ scale: [1.2, 1, 1.2], x: [0, 50, 0] }} transition={{ duration: 15, repeat: Infinity }} className="absolute bottom-[20%] left-[-5%] w-[600px] h-[600px] bg-emerald-300/10 rounded-full blur-[120px] pointer-events-none" />
@@ -223,6 +233,7 @@ const AboutUs = () => {
         </Link>
       </motion.div>
     </div>
+    </>
   );
 };
 

@@ -51,15 +51,17 @@ const Body = () => {
       const isUnauthorized = error.response?.status === 401;
       const isServerDown = !error.response;
 
-      // Use locationRef.current (not the stale closure `location`) so we always
-      // read the pathname at the moment the 401 arrives, not at mount time.
       if (
         (isUnauthorized || isServerDown) &&
         !isPublicRoute(locationRef.current)
       ) {
         navigate("/login");
       }
-      console.error(error.message);
+      
+      // Handle 401 silently to stop cluttering the console on unauthenticated visits
+      if (!isUnauthorized) {
+        console.error(error.message);
+      }
     }
   };
 
@@ -90,7 +92,20 @@ const Body = () => {
     };
 
   useEffect(() => {
-    fetchUser();
+    // 🚀 FIX: Defer API call on public routes to reduce main thread blocking (TBT)
+    if (isPublicRoute(location.pathname)) {
+      const timer = setTimeout(() => {
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(() => fetchUser());
+        } else {
+          fetchUser();
+        }
+      }, 500);
+      return () => clearTimeout(timer);
+    } else {
+      fetchUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isLoginPage = location.pathname === "/login";

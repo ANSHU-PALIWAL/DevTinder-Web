@@ -142,6 +142,9 @@ const BlogDetail = () => {
         <meta property="og:url" content={`https://connectneighbour.in/blogs/${post.slug}`} />
         <meta property="og:type" content="article" />
         <meta name="author" content={post.author} />
+        {post?.coverImage && (
+          <link rel="preload" as="image" href={post.coverImage} />
+        )}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -166,6 +169,7 @@ const BlogDetail = () => {
           <img
             src={post.coverImage}
             alt={post.title}
+            fetchpriority="high"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
@@ -272,6 +276,7 @@ const BlogDetail = () => {
                 <img
                   src={p.coverImage}
                   alt={p.title}
+                  loading="lazy"
                   className="w-20 h-20 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="flex-1 min-w-0">
