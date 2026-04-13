@@ -46,6 +46,19 @@ const BlogsPage = () => {
         {featured?.coverImage && (
           <link rel="preload" as="image" href={featured.coverImage} />
         )}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "itemListElement": BLOG_POSTS.map((post, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "url": `https://connectneighbour.in/blogs/${post.slug}`,
+              "name": post.title,
+              "description": post.excerpt
+            }))
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-[#F8FAFC]">

@@ -21,6 +21,7 @@ const HomePage = React.lazy(() => import("./components/HomePage"));
 const BlogsPage = React.lazy(() => import("./components/BlogsPage"));
 const BlogDetail = React.lazy(() => import("./components/BlogDetail"));
 const ContactPage = React.lazy(() => import("./components/ContactPage"));
+const CitySEO = React.lazy(() => import("./components/CitySEO"));
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/blogs" element={<BlogsPage />} />
                 <Route path="/blogs/:slug" element={<BlogDetail />} />
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/location/:city" element={<CitySEO />} />
 
                 {/* Catch-All Route: Must be the very last route! */}
                 <Route path="*" element={<NotFound />} />

@@ -91,6 +91,38 @@ const HomePage = () => {
         <meta property="og:description" content="Smart, privacy-first local networking. Match with neighbors, share skills, and build the community your street deserves." />
         <meta property="og:url" content="https://connectneighbour.in/home" />
         <meta property="og:image" content="https://connectneighbour.in/og-image.jpg" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How does ConnectNeighbour work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "ConnectNeighbour matches you with verified neighbors within a local radius. You can swipe, match, and chat safely without ever sharing your phone number."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is ConnectNeighbour safe to use?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. We use a privacy-first approach. Your exact location and phone number are hidden, and you only interact with people if there is a mutual double-opt-in interest."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is the maximum geographic radius?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The platform focuses on hyper-local community building within a 1km to 100km radius depending on your discovery settings."
+                }
+              }
+            ]
+          })}
+        </script>
       </Helmet>
 
       <div className="min-h-screen bg-[#F8FAFC] overflow-hidden relative">

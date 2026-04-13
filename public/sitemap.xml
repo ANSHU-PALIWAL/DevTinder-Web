@@ -76,4 +76,26 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- ─── Programmatic Local SEO Routes ─── -->
+  <url><loc>https://connectneighbour.in/location/mumbai</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/delhi</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/bangalore</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/pune</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/hyderabad</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/chennai</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/gurgaon</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/noida</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/jaipur</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/udaipur</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://connectneighbour.in/location/ahmedabad</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/kolkata</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/surat</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/lucknow</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/kanpur</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/nagpur</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/indore</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/thane</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/bhopal</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://connectneighbour.in/location/patna</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
 </urlset>
