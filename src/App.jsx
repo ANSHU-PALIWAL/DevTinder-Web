@@ -22,6 +22,9 @@ const BlogsPage = React.lazy(() => import("./components/BlogsPage"));
 const BlogDetail = React.lazy(() => import("./components/BlogDetail"));
 const ContactPage = React.lazy(() => import("./components/ContactPage"));
 const CitySEO = React.lazy(() => import("./components/CitySEO"));
+const PrivacyPolicy = React.lazy(() => import("./components/PrivacyPolicy"));
+const TermsConditions = React.lazy(() => import("./components/TermsConditions"));
+const LegalNotice = React.lazy(() => import("./components/LegalNotice"));
 
 function App() {
   return (
@@ -49,6 +52,9 @@ function App() {
                 <Route path="/blogs/:slug" element={<BlogDetail />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/location/:city" element={<CitySEO />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsConditions />} />
+                <Route path="/legal" element={<LegalNotice />} />
 
                 {/* Catch-All Route: Must be the very last route! */}
                 <Route path="*" element={<NotFound />} />

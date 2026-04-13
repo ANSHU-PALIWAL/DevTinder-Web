@@ -15,7 +15,17 @@ import { Smartphone, X } from "lucide-react";
 // to /home by useEffect. Without this, a stale closure in fetchUser's catch
 // block sees pathname="/" and fires navigate("/login") before the /home
 // redirect can complete — causing the production redirect loop.
-const PUBLIC_ROUTES = ["/login", "/home", "/about", "/blogs", "/contact", "/"];
+const PUBLIC_ROUTES = [
+  "/login",
+  "/home",
+  "/about",
+  "/blogs",
+  "/contact",
+  "/privacy",
+  "/terms",
+  "/legal",
+  "/",
+];
 
 const isPublicRoute = (pathname) => {
   if (PUBLIC_ROUTES.includes(pathname)) return true;

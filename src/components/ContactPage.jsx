@@ -127,7 +127,7 @@ const ContactPage = () => {
                 {
                   icon: Mail,
                   title: "Email",
-                  value: "hello@connectneighbour.in",
+                  value: "hello.connectneighbour@gmail.com",
                   sub: "For general queries & partnerships",
                 },
                 {

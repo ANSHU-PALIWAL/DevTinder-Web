@@ -33,6 +33,24 @@
     <priority>0.8</priority>
   </url>
 
+  <url>
+    <loc>https://connectneighbour.in/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://connectneighbour.in/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://connectneighbour.in/legal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
   <!-- ─── Blog Posts ─── -->
   <url>
     <loc>https://connectneighbour.in/blogs/how-to-meet-neighbors-2025</loc>

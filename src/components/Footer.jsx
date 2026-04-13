@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Github, Twitter, Linkedin, Heart } from "lucide-react";
 
 const Footer = () => {
@@ -6,6 +7,13 @@ const Footer = () => {
     <footer className="w-full py-6 px-4 sm:px-8 border-t border-slate-200/60 bg-white/80 backdrop-blur-md flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-500 transition-all z-40">
       <div className="flex flex-col sm:flex-row items-center gap-1.5 text-center sm:text-left font-medium">
         <span>© {new Date().getFullYear()} ConnectNeighbour.</span>
+        <div className="hidden sm:block w-px h-3 bg-slate-300 mx-2" />
+        <div className="flex items-center gap-3">
+          <Link to="/privacy" className="hover:text-emerald-600 transition-colors">Privacy</Link>
+          <Link to="/terms" className="hover:text-emerald-600 transition-colors">Terms</Link>
+          <Link to="/legal" className="hover:text-emerald-600 transition-colors">Legal</Link>
+        </div>
+        <div className="hidden sm:block w-px h-3 bg-slate-300 mx-2" />
         <span className="flex items-center gap-1.5">
           Built with{" "}
           <Heart
