@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { getSocket } from "../utils/socket";
+import { getSocket, createSocketConnection } from "../utils/socket";
 import { decryptMessage } from "../utils/crypto";
 import { PhoneIncoming, Video, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -17,7 +17,7 @@ const GlobalAppManager = () => {
   useEffect(() => {
     if (!userData) return;
     
-    const socket = getSocket();
+    const socket = createSocketConnection();
     if (!socket) return;
 
     // 1. Global Message Notifications

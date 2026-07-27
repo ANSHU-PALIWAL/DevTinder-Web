@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
-import { getSocket } from "../utils/socket";
+import { getSocket, createSocketConnection } from "../utils/socket";
 import { encryptMessage, decryptMessage } from "../utils/crypto";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Send, Image as ImageIcon, Video, X } from "lucide-react";
@@ -102,7 +102,7 @@ const Chat = () => {
     initializeChat();
 
     // Socket listeners
-    const socket = getSocket();
+    const socket = createSocketConnection();
     if (socket) {
       socket.on("receiveMessage", async (incomingMsg) => {
         if (incomingMsg.senderId === targetUserId) {

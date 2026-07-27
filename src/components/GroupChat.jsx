@@ -4,7 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { API_BASE_URL } from "../utils/constants";
 import { ArrowLeft, Send } from "lucide-react";
-import { getSocket } from "../utils/socket";
+import { getSocket, createSocketConnection } from "../utils/socket";
 import dayjs from "dayjs";
 
 const GroupChat = () => {
@@ -29,7 +29,7 @@ const GroupChat = () => {
     if (!user) return;
     fetchMessages();
 
-    const socket = getSocket();
+    const socket = createSocketConnection();
     if (!socket) return;
 
     // Join the group room
