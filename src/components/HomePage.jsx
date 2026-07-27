@@ -15,6 +15,9 @@ import {
   Coffee,
   Sparkles,
   CheckCircle,
+  Video,
+  Bell,
+  Briefcase
 } from "lucide-react";
 
 const fadeIn = {
@@ -43,27 +46,27 @@ const FEATURES = [
     color: "blue",
   },
   {
-    icon: Map,
-    title: "100km Hard Limit",
-    desc: "Discovery capped at 100km to ensure every connection stays real and face-to-face possible.",
-    color: "violet",
-  },
-  {
     icon: Radar,
     title: "Discovery Map Hub",
     desc: "See exactly where your network thrives on a live, interactive neighborhood radar.",
     color: "emerald",
   },
   {
-    icon: Users,
-    title: "Skill Sharing",
-    desc: "Tag your real skills. Find a yoga partner, a plumber, a German tutor — all next door.",
+    icon: Video,
+    title: "HD Video Calling",
+    desc: "Seamless, secure WebRTC video calls directly within the app. No phone numbers needed.",
+    color: "violet",
+  },
+  {
+    icon: Briefcase,
+    title: "Local Business Boost",
+    desc: "Upgrade to a Business Profile and natively promote your shop or services to the neighborhood.",
     color: "amber",
   },
   {
-    icon: Star,
-    title: "Verified Community",
-    desc: "Every profile is backed by real sign-up data. No bots. No fake neighbors.",
+    icon: Bell,
+    title: "Instant Push Alerts",
+    desc: "Never miss a match or message with real-time push notifications delivered to your device.",
     color: "rose",
   },
 ];

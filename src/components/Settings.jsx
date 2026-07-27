@@ -11,6 +11,8 @@ import {
   CheckCircle2,
   AlertTriangle,
   XCircle,
+  Briefcase,
+  Store
 } from "lucide-react";
 
 const Settings = () => {
@@ -22,6 +24,12 @@ const Settings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState({ text: "", type: "" });
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  const [businessData, setBusinessData] = useState({
+    businessName: "",
+    businessCategory: "Cafe",
+    businessAddress: ""
+  });
 
   const handleUpdatePassword = async () => {
     setMessage({ text: "", type: "" });
@@ -56,6 +64,22 @@ const Settings = () => {
     }
   };
 
+  const handleUpgradeBusiness = async () => {
+    setMessage({ text: "", type: "" });
+    try {
+      await axios.post(
+        API_BASE_URL + "/profile/business/upgrade",
+        businessData,
+        { withCredentials: true }
+      );
+      setMessage({ text: "Upgraded to Business Profile!", type: "success" });
+      setTimeout(() => window.location.reload(), 2000); // Reload to reflect changes in redux store
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Failed to upgrade.";
+      setMessage({ text: errorMessage, type: "error" });
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4 sm:p-8 min-h-[85vh] flex flex-col">
       <div className="mb-8 mt-4">
@@ -74,6 +98,12 @@ const Settings = () => {
             className={`px-4 py-3 rounded-xl flex items-center gap-3 font-bold text-sm transition-all text-left w-full ${activeTab === "security" ? "bg-emerald-50 text-emerald-600 shadow-sm border border-emerald-100" : "text-slate-500 hover:bg-slate-50 hover:text-slate-700 border border-transparent"}`}
           >
             <Shield size={18} /> Security
+          </button>
+          <button
+            onClick={() => setActiveTab("business")}
+            className={`px-4 py-3 rounded-xl flex items-center gap-3 font-bold text-sm transition-all text-left w-full ${activeTab === "business" ? "bg-amber-50 text-amber-600 shadow-sm border border-amber-100" : "text-slate-500 hover:bg-amber-50 hover:text-amber-600 border border-transparent"}`}
+          >
+            <Briefcase size={18} /> Business Profile
           </button>
           <button
             onClick={() => setActiveTab("danger")}
@@ -126,6 +156,73 @@ const Settings = () => {
                     className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-100 transition-all active:scale-95 mt-4"
                   >
                     Update Password
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === "business" && (
+              <motion.div
+                key="bus"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+              >
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-amber-600 tracking-tight">
+                  <Store size={24} /> Upgrade to Business
+                </h2>
+                <div className="bg-amber-50/50 border border-amber-100 rounded-2xl p-6 mb-6">
+                  <p className="text-sm text-amber-700 font-medium">
+                    Showcase your local business on the Radar Map. Your profile will stand out with a special Storefront icon, allowing neighbors to discover you easily!
+                  </p>
+                </div>
+                <div className="space-y-5 max-w-md">
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">
+                      Business Name
+                    </label>
+                    <input
+                      type="text"
+                      value={businessData.businessName}
+                      onChange={(e) => setBusinessData({...businessData, businessName: e.target.value})}
+                      placeholder="e.g. Joe's Plumbing"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">
+                      Category
+                    </label>
+                    <select
+                      value={businessData.businessCategory}
+                      onChange={(e) => setBusinessData({...businessData, businessCategory: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-sm text-slate-900 font-medium"
+                    >
+                      <option value="Cafe">Cafe / Restaurant</option>
+                      <option value="Plumbing">Plumbing / Repairs</option>
+                      <option value="Tutor">Tutor / Education</option>
+                      <option value="Fitness">Gym / Fitness</option>
+                      <option value="Retail">Local Retail</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1 mb-1.5 block">
+                      Address (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={businessData.businessAddress}
+                      onChange={(e) => setBusinessData({...businessData, businessAddress: e.target.value})}
+                      placeholder="123 Main St"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-sm text-slate-900 font-medium placeholder:text-slate-400"
+                    />
+                  </div>
+                  <button
+                    onClick={handleUpgradeBusiness}
+                    className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-amber-500/30 transition-all active:scale-95 mt-4"
+                  >
+                    Upgrade Now
                   </button>
                 </div>
               </motion.div>

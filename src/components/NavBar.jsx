@@ -12,13 +12,27 @@ import {
   UserPlus,
   Home,
   Navigation,
+  MessageCircle,
+  Menu,
+  X
 } from "lucide-react";
+import { useState } from "react";
+
+const PUBLIC_NAV_LINKS = [
+  { to: "/home", label: "Home" },
+  { to: "/about", label: "About" },
+  { to: "/blogs", label: "Blog" },
+  { to: "/contact", label: "Contact" },
+];
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  
+  const isLoginPage = location.pathname === "/login";
 
   const handleLogout = async () => {
     try {
@@ -97,6 +111,16 @@ const NavBar = () => {
                 />
                 <span>Requests</span>
               </Link>
+              <Link
+                to="/groups"
+                className={`${navLinkBase} ${isActive("/groups") ? navLinkActive : navLinkInactive}`}
+              >
+                <MessageCircle
+                  size={18}
+                  strokeWidth={isActive("/groups") ? 2.5 : 2}
+                />
+                <span>Groups</span>
+              </Link>
             </div>
 
             <div className="dropdown dropdown-end">
@@ -170,6 +194,18 @@ const NavBar = () => {
                     Requests
                   </Link>
                 </li>
+                <li className="lg:hidden">
+                  <Link
+                    to="/groups"
+                    className={`flex items-center gap-3 px-4 py-3 text-[14px] font-medium rounded-xl transition-colors ${isActive("/groups") ? "bg-emerald-50 text-emerald-600" : "text-slate-600 hover:bg-slate-50 hover:text-emerald-600"}`}
+                  >
+                    <MessageCircle
+                      size={18}
+                      strokeWidth={isActive("/groups") ? 2.5 : 2}
+                    />{" "}
+                    Groups
+                  </Link>
+                </li>
                 <div className="lg:hidden h-[1px] bg-slate-100 w-full my-1"></div>
 
                 <li>
@@ -201,7 +237,69 @@ const NavBar = () => {
             </div>
           </div>
         )}
+
+        {!user && (
+          <>
+            <nav className="hidden md:flex items-center gap-1">
+              {PUBLIC_NAV_LINKS.map(({ to, label }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className={`px-4 py-2 text-sm font-semibold rounded-full transition-colors ${
+                    isActive(to)
+                      ? "text-emerald-700 bg-emerald-50"
+                      : "text-slate-600 hover:text-emerald-600 hover:bg-emerald-50"
+                  }`}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <div className="flex items-center gap-3 flex-shrink-0 ml-4">
+              {!isLoginPage && (
+                <Link
+                  to="/login"
+                  className="px-5 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-full transition-colors shadow-md shadow-emerald-500/20 active:scale-95 hidden sm:inline-flex items-center"
+                >
+                  Login / Join
+                </Link>
+              )}
+              <button
+                onClick={() => setMobileOpen((v) => !v)}
+                className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+              >
+                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
+          </>
+        )}
       </div>
+
+      {!user && mobileOpen && (
+        <div className="md:hidden mt-3 pb-3 border-t border-slate-100 pt-3 flex flex-col gap-1">
+          {PUBLIC_NAV_LINKS.map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={() => setMobileOpen(false)}
+              className={`px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors ${
+                isActive(to)
+                  ? "text-emerald-700 bg-emerald-50"
+                  : "text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+          <Link
+            to="/login"
+            onClick={() => setMobileOpen(false)}
+            className="mt-2 px-4 py-2.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl text-center transition-colors"
+          >
+            Login / Join
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Body from "./components/Body";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import { Toaster } from "react-hot-toast";
 
 // Lazy Loaded Components
 const Feed = React.lazy(() => import("./components/Feed"));
@@ -25,11 +26,15 @@ const CitySEO = React.lazy(() => import("./components/CitySEO"));
 const PrivacyPolicy = React.lazy(() => import("./components/PrivacyPolicy"));
 const TermsConditions = React.lazy(() => import("./components/TermsConditions"));
 const LegalNotice = React.lazy(() => import("./components/LegalNotice"));
+const Chat = React.lazy(() => import("./components/Chat"));
+const Groups = React.lazy(() => import("./components/Groups"));
+const GroupChat = React.lazy(() => import("./components/GroupChat"));
 
 function App() {
   return (
     <HelmetProvider>
       <Provider store={appStore}>
+        <Toaster position="top-center" toastOptions={{ duration: 4000, style: { background: '#334155', color: '#fff', borderRadius: '16px' } }} />
         <BrowserRouter basename="/">
           <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-slate-50"><div className="w-8 h-8 rounded-full border-4 border-slate-200 border-t-emerald-500 animate-spin"></div></div>}>
             <Routes>
@@ -44,6 +49,9 @@ function App() {
                 <Route path="/profile/edit" element={<Profile />} />
                 <Route path="/connections" element={<Connections />} />
                 <Route path="/match/profile" element={<PublicProfile />} />
+                <Route path="/chat/:userId" element={<Chat />} />
+                <Route path="/groups" element={<Groups />} />
+                <Route path="/group-chat/:groupId" element={<GroupChat />} />
 
                 {/* ── Public Marketing Routes ── */}
                 <Route path="/home" element={<HomePage />} />

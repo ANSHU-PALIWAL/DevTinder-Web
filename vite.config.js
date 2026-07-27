@@ -21,6 +21,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      strategies: "injectManifest",
+      srcDir: "public",
+      filename: "sw.js",
       injectRegister: "script-defer",
       // 🚀 ADD THIS BLOCK TO ENABLE TESTING IN DEV MODE
       devOptions: {

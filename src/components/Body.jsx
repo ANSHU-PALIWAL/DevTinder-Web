@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import NavBar from "./NavBar";
-import PublicNavBar from "./PublicNavBar";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import Footer from "./Footer";
 import axios from "axios";
@@ -9,6 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import { Smartphone, X } from "lucide-react";
+import { initializeCrypto } from "../utils/crypto";
+import { createSocketConnection } from "../utils/socket";
+import GlobalAppManager from "./GlobalAppManager";
 
 // Routes accessible without authentication
 // NOTE: "/" is included because unauthenticated users at root get redirected
@@ -68,7 +70,6 @@ const Body = () => {
         navigate("/login");
       }
       
-      // Handle 401 silently to stop cluttering the console on unauthenticated visits
       if (!isUnauthorized) {
         console.error(error.message);
       }
@@ -102,7 +103,6 @@ const Body = () => {
     };
 
   useEffect(() => {
-    // 🚀 FIX: Defer API call on public routes to reduce main thread blocking (TBT)
     if (isPublicRoute(location.pathname)) {
       const timer = setTimeout(() => {
         if ("requestIdleCallback" in window) {
@@ -120,20 +120,66 @@ const Body = () => {
 
   const isLoginPage = location.pathname === "/login";
 
+  const subscribeToPush = async () => {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      let subscription = await registration.pushManager.getSubscription();
+      
+      if (!subscription) {
+        const publicVapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+        const urlBase64ToUint8Array = (base64String) => {
+          const padding = "=".repeat((4 - base64String.length % 4) % 4);
+          const base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
+          const rawData = window.atob(base64);
+          const outputArray = new Uint8Array(rawData.length);
+          for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+          }
+          return outputArray;
+        };
+
+        subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+        });
+      }
+
+      // Send the subscription to the backend
+      await axios.post(`${API_BASE_URL}/profile/push/subscribe`, subscription, { withCredentials: true });
+    } catch (err) {
+      console.warn("Failed to subscribe to push notifications:", err);
+    }
+  };
+
+  const pushSubscribedRef = useRef(false);
+
   useEffect(() => {
-    // Logged-out user hits the root — send to public home page
     if (!userData && location.pathname === "/") {
       navigate("/home");
     }
 
-    // Logged-in user on login page — send to feed
     if (userData && isLoginPage) {
       navigate("/");
     }
 
-    if (userData && !locationUpdatedRef.current) {
-      locationUpdatedRef.current = true;
-      updateLocation();
+    if (userData) {
+      initializeCrypto(userData._id);
+      createSocketConnection();
+
+      // Ask for notification permission and subscribe only once per session
+      if ("Notification" in window && navigator.serviceWorker && !pushSubscribedRef.current) {
+        pushSubscribedRef.current = true;
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            subscribeToPush();
+          }
+        });
+      }
+
+      if (!locationUpdatedRef.current) {
+        locationUpdatedRef.current = true;
+        updateLocation();
+      }
     }
   }, [userData, location.pathname, navigate]);
 
@@ -196,7 +242,8 @@ const Body = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans relative overflow-x-hidden">
-      {userData ? <NavBar /> : <PublicNavBar />}
+      {userData && <GlobalAppManager />}
+      <NavBar />
 
       <main
         className={`flex-grow flex flex-col ${userData && !isLoginPage ? "pt-20 pb-8 px-4 sm:px-6 lg:px-8" : ""}`}
@@ -204,7 +251,7 @@ const Body = () => {
         <Outlet />
       </main>
 
-      {userData && <Footer />}
+      {!isLoginPage && <Footer />}
 
       <AnimatePresence>
         {showInstallPopup && (

@@ -14,7 +14,10 @@ import {
   Radar,
   Star,
   Heart,
-  X
+  X,
+  Video,
+  Bell,
+  Briefcase
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -104,6 +107,10 @@ const AboutUs = () => {
       <motion.div id="features" className="max-w-7xl mx-auto mt-24 grid md:grid-cols-3 gap-10 relative z-10 pt-10" initial="initial" whileInView="whileInView" variants={staggerContainer} viewport={{ once: true, margin: "-100px" }}>
         <FeatureCard icon={Shield} title="Privacy Fortress" description="Built with a 'Privacy-First' soul. No leaked phone numbers, no creepy tracking. Just safe local vibes." />
         <FeatureCard icon={HeartHandshake} title="Vibe Match" description="Forget cold messaging. Our algorithm ensures you only chat when there's a mutual local connection." />
+        <FeatureCard icon={Video} title="HD Video Calling" description="In-app WebRTC video calling. Jump on a face-to-face call instantly without exposing your private phone number." />
+        
+        <FeatureCard icon={Briefcase} title="Local Business" description="Empowering local vendors. Setup a Business Profile and get discovered instantly by your immediate neighborhood." />
+        <FeatureCard icon={Bell} title="Instant Alerts" description="Never miss a connection. Our global push notification infrastructure keeps you updated the second a neighbor reaches out." />
         <FeatureCard icon={Map} title="Hyper-Local Limit" description="We intentionally limit discovery to a strict 100km radius to guarantee real face-to-face community building." />
       </motion.div>
 

@@ -123,10 +123,10 @@ const Connections = () => {
               </div>
 
               <div className="flex gap-3 w-full mt-auto">
-                <button className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
+                <Link to={`/chat/${_id}`} className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-500/30 transition-all active:scale-95 flex items-center justify-center gap-2">
                   <MessageSquare size={18} />
                   Message
-                </button>
+                </Link>
                 <Link
                   to="/match/profile"
                   state={{ user: connection }}

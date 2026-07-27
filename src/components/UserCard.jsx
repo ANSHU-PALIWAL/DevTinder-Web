@@ -4,7 +4,7 @@ import { API_BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import { motion, useMotionValue, useTransform } from "framer-motion";
-import { User as UserIcon, Heart, X } from "lucide-react";
+import { User as UserIcon, Heart, X, Store } from "lucide-react";
 
 const UserCard = ({ user, isInteractive = true, onAction }) => {
   const {
@@ -16,6 +16,9 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
     gender = "Unknown",
     about = "No bio provided.",
     skills = [],
+    isBusiness = false,
+    businessName = "",
+    businessCategory = "",
   } = user || {};
 
   const dispatch = useDispatch();
@@ -101,10 +104,15 @@ const UserCard = ({ user, isInteractive = true, onAction }) => {
 
       <div className="absolute bottom-0 w-full p-6 z-20 text-white flex flex-col gap-3">
         <div>
+          {isBusiness && (
+            <span className="bg-amber-500 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md mb-2 w-max shadow-md flex items-center gap-1.5">
+              <Store size={12} /> {businessCategory || "Local Business"}
+            </span>
+          )}
           <h2 className="text-3xl font-extrabold flex items-center gap-2 drop-shadow-md text-white leading-tight">
-            {firstName} {lastName}
+            {isBusiness ? businessName : `${firstName} ${lastName}`}
           </h2>
-          {age && gender && (
+          {!isBusiness && age && gender && (
             <p className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 mt-2 uppercase tracking-widest">
               <UserIcon size={14} className="text-emerald-400" /> {age} •{" "}
               {gender}
