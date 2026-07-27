@@ -122,7 +122,14 @@ const Body = () => {
 
   const subscribeToPush = async () => {
     try {
-      const registration = await navigator.serviceWorker.ready;
+      // Check if service workers are supported and registered
+      if (!("serviceWorker" in navigator)) return;
+      
+      const registration = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Service Worker timeout")), 3000))
+      ]);
+      
       let subscription = await registration.pushManager.getSubscription();
       
       if (!subscription) {
@@ -147,7 +154,7 @@ const Body = () => {
       // Send the subscription to the backend
       await axios.post(`${API_BASE_URL}/profile/push/subscribe`, subscription, { withCredentials: true });
     } catch (err) {
-      console.warn("Failed to subscribe to push notifications:", err);
+      console.warn("Push notifications are not supported or failed to subscribe in this browser.");
     }
   };
 

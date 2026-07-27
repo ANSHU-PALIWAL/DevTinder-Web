@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { ArrowLeft, User as UserIcon, MessageSquare, Tag, Phone, X, MoreVertical, ShieldAlert, Flag } from "lucide-react";
+import { ArrowLeft, User as UserIcon, MessageSquare, Tag, Phone, X, MoreVertical, ShieldAlert, Flag, Store } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { API_BASE_URL } from "../utils/constants";
@@ -76,6 +76,9 @@ const PublicProfile = () => {
     gender,
     mobileNumber,
     gallery = [],
+    isBusiness,
+    businessName,
+    businessCategory,
   } = user;
   const displayImage =
     photoUrl ||
@@ -137,13 +140,22 @@ const PublicProfile = () => {
 
           <div className="flex-1 space-y-6 w-full text-center md:text-left">
             <div>
+              {isBusiness && (
+                <div className="flex justify-center md:justify-start mb-2">
+                  <span className="bg-amber-500 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-md flex items-center gap-1.5">
+                    <Store size={12} /> {businessCategory || "Local Business"}
+                  </span>
+                </div>
+              )}
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                {firstName} {lastName}
+                {isBusiness ? businessName : `${firstName} ${lastName}`}
               </h2>
-              <p className="text-sm font-bold text-slate-400 flex items-center justify-center md:justify-start gap-1.5 mt-2 uppercase tracking-widest">
-                <UserIcon size={16} className="text-emerald-500" /> {age} years
-                old • {gender}
-              </p>
+              {!isBusiness && (
+                <p className="text-sm font-bold text-slate-400 flex items-center justify-center md:justify-start gap-1.5 mt-2 uppercase tracking-widest">
+                  <UserIcon size={16} className="text-emerald-500" /> {age} years
+                  old • {gender}
+                </p>
+              )}
               {mobileNumber && (
                 <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl font-bold text-sm border border-emerald-100 shadow-sm mx-auto md:mx-0">
                   <Phone size={16} /> {mobileNumber}

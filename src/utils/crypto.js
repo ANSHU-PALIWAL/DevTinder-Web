@@ -105,8 +105,10 @@ export const decryptMessage = async (encryptedBase64, userId) => {
 
     return new TextDecoder().decode(decrypted);
   } catch (err) {
-    console.error("Decryption error:", err);
-    return "[Decryption Failed]";
+    // If decryption fails, it's typically because the user doesn't have the 
+    // correct private key in their IndexedDB (e.g. they logged in on a new device).
+    // We suppress the console error to prevent spamming the logs.
+    return "[Message encrypted on another device]";
   }
 };
 

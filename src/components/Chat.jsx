@@ -398,7 +398,9 @@ const Chat = () => {
                   : "bg-white text-slate-800 border border-slate-100 rounded-tl-sm"
               }`}>
                 {msg.type === "text" ? (
-                  <p className="text-[15px] leading-relaxed break-words">{msg.text}</p>
+                  <p className={`text-[15px] leading-relaxed break-words ${msg.text === "[Message encrypted on another device]" ? "italic opacity-80" : ""}`}>
+                    {msg.text}
+                  </p>
                 ) : (
                   <img src={msg.imageUrl} alt="Shared" className="rounded-xl max-w-full mt-1 mb-1" />
                 )}
